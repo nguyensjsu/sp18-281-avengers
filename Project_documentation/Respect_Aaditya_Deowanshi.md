@@ -9,3 +9,9 @@ The core agile value of respect is shown in the following instances during week 
 * On hearing about the project from the professor, the developers in the team insisted on using AWS ECS or docker cloud for the team project. The members in the team - though few don't have prior experience in AWS ECS respected this decision. This is a clear representation of the team showing respect towards other team-mate's interests.
     
 * While working on the wiki pages and Readme.md, the team mates recognized that they have very limited exposure on go api's and web development. This is a clear indication of respect present in the team as they openly admitted it when they are stuck, which is impossible if the team mates dont respect each other.
+
+## Respect shown in Week 2
+
+* During the team discussion on 30 September, everyone was given a chance to give their views in developing the architecture of the project. This is a clear indicator of respect shown towards team's opinions.
+
+* After a short discussion with Prof. Paul, the team reconsidered to use docker cloud for the project. Waiting for the professor's consent in using docker cloud shows the respect shown towards the professor by the team.
