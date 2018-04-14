@@ -17,6 +17,7 @@ On week one, we discussed architecture and topic related to our team project.
 * Choose which database to use
 * Discussed Redis and Riak database
 *  Received feedback from teammates
+*  Starting making architecture diagram
 
 On week one, we discussed the types of databases we were going to use like Redis or Riak.  We also talked about basic architecture
 
@@ -26,5 +27,17 @@ On week 2, we discussed the frequency of individual feedback as well as group fe
 * Started drawing front end UI design on Sketch. Discussed challenges we encountered. 
 * Discussed Redis and Riak database
 *  Received feedback from teammates
+*  Faced some issues in configuring Redis master slave configuration
+
+
+## Week 3
+On week three, we discussed past feedbacks. Each team member started working on their own assigned tasks. 
+*  Team members also shared their findings and research
+*  Started showing results and discussed among team members
+*  Resolved problems and code reviews
+*  Team members talked about their progress
+* Started on Go API 
+* Team members expressed their concerns and problems
+* The whole talked about continuous improvements 
 
 
