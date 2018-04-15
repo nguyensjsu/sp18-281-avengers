@@ -18,3 +18,8 @@ All the above are very common in every stage of development, hence Courage is co
 * I have initiated to have discussion to work on Counter Burger application and various features to be implemented. However it was rejected by few team members as they have their own ideas, but I couragely explained them why I have my idea to implement the Counter Burger application stating that we should concentrate more on architecture aspects and deployment rather building a very complex front end application.
 * Finally everyone realised the key aspect of the project requirement and decided to work on Counter Burger application 
 
+# Courage shown in Week 3:
+* On 14th April 2018,Keeping Courage inline with Agile core values, We started learning on the building a REST API using GO without any prior experience on GOlang.We intially started with a ping request understanding how an end point is exposed using GO, as it is very different from Javascript.
+* We decided to have nodejs as front end and maintain different Nosql db Riak and Redis as backend. Entire team took it as a courage to work on two different Nosql db and integrate with the application
+* Though we are not very clear of how to implement the architecture, every one in the team brainstormed individual aspect of the architecture and decided to continue with flow
+
