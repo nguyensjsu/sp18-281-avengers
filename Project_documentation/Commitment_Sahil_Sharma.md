@@ -15,3 +15,11 @@ Below are the core agile value of Commitment seen in Week 1 development:
 
 * From the first week as we discussed over e-mails, theri commitments and weekly hours they can commit for it, seems like everyone has this spirit and clear expectation and their role within the team.  
 * Few peoples were good at few things and other's have their own skills (like UI expertise, Back end concepts, Deployment), but everyone team were curious and other's were helpful to share and teach the concepts which other's were kind of back. Hence it shows a positive commitment to deliver the product.
+
+## Week 2
+
+Below are the core agile value of Commitment seen in Week 2 development:  
+
+* Since we had two projects Individual and the Hackathon, we had two flavors of Databases in our application Redis and Riak, Team spent entire week in researching about their Databse selected, and later during the weekly meeting I could see everyoen pooled in and figured out the impediments encountered collaboratively. This clearly shows a sense of commitment in the team for a common goal.  
+
+* There was a problem , when one of our team member fell sick and was unable to participate in person in meeting, he still atended the weekly meeting through Hangout. Thsi clearly shows a level of commitment within the team.  
