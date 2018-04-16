@@ -4,9 +4,11 @@ import (
 	//"encoding/json"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	//"log"
 
 	"github.com/go-redis/redis"
+	"github.com/gorilla/mux"
 )
 
 type Book struct {
@@ -18,6 +20,28 @@ type Book struct {
 type Author struct {
 	Firstname string `json: "firstname"`
 	Lastname  string `json: "lastname"`
+}
+
+var books []Book
+
+//Get all books
+func getBooks(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(books)
+}
+
+//Get a single book
+func getBook(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r) //Get params
+	//Loop through books and find with id
+	for _, item := range books {
+		if item.ID == params["id"] {
+			json.NewEncoder(w).Encode(item)
+			return
+		}
+	}
+	json.NewEncoder(w).Encode(&Book{})
 }
 
 func main() {
