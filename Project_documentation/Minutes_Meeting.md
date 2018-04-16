@@ -94,3 +94,53 @@ Discussed on features to be implemented. Following features listed below are dec
 
         * List the payment history 
 
+# Week 3: (saturday)
+
+Time : 12.10 pm 
+
+Place : Library, San Jose State University 
+
+**Members Present :** 
+
+* Raghavendra 
+
+* Sahil 
+
+* Aditya 
+
+* Bruce 
+
+* Spandana 
+
+**Meeting Discussion:** 
+
+* Discussed on Architecture for the Counter Burger application 
+
+* Discussed on the different NoSql db to be worked on 
+
+* Following are the NoSql dbs to be worked on by team 
+
+* Riak – Raghavendra, Sahil, Aditya 
+
+* Redis – Bruce and Spandana 
+
+* Each member will have 5 nodes with the Nosql  
+
+* ELB will be maintained by Raghavendra, Sahil and Aditya with their Riak NoSql 
+
+* Discussed to host the application on Heroku, host GO apis as a micro service on the EC2 instance 
+
+* Dockerize few features of the application 
+
+* Maintain the image in the docker cloud for few features of the application 
+
+* Implement Sharding as caching mechanism using Redis for few features 
+
+* Display the stale data when there is a network partition, by hitting the endpoint using the Postman 
+
+* Different technologies to be worked on for the front end development 
+
+* Designed Wireframes for different screens of the application
+ 
+* Start working with simple ping API in GO
+
