@@ -27,3 +27,11 @@ Since our requirements and matches to the Applicability mentioned above we found
 * we created a google drive to share our common documents and files.  
 * Creted Slack channel for better communication and connectivity.  
 
+## Week 3
+* Since everyone was almost clear in deciding their database and approach for their individual project, we came up with few ideas for our hackathon project like : Starbucks API, Counter Burger, Piza Delivery, Food Delivery.  
+* We decided to proceed with Counter Burger, as it has almost good number of CRUD functionality, which everyone in team can pick up and also create for their individual project.  
+* After a long discussion, everyone on the same page and we had a very highlevel overview of the functionality to be implemented in our application. 
+* In full one week during research and since our team we have two varieties of Databases Riak and Redis there were many problems as if how we are gonna establish connection.  
+* We also decided on the High Level overview and architecture of the Counter Burger Application.  
+* Since in after working and Re-searching on the topic for the entire week, we also decided which individual is gonna take which functionality. we decided and communicated within the team.  
+
