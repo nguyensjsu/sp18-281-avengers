@@ -111,6 +111,25 @@ func initRoutes(mx *mux.Router, formatter *render.Render) {
 	mx.HandleFunc("/ping", pingHandler(formatter)).Methods("GET")
 }
 
+func (c *Client) CreatePayment(key, reqbody string) (payment, error) {
+   	var payment_nil = payment {}
+	
+	resp, err := c.Post(c.Endpoint + "/buckets/payment/keys/"+key+"?returnbody=true", 
+						"application/json", strings.NewReader(reqbody) )
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return payment_nil, err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if debug { fmt.Println("[RIAK DEBUG] POST: " + c.Endpoint + "/buckets/payment/keys/"+key+"?returnbody=true => " + string(body)) }
+	var pay payment
+	err1 := json.Unmarshal(body, &pay)
+	_ = err1
+ 	fmt.Println(pay)
+	return pay, err
+}
+
 // Helper Functions
 func failOnError(err error, msg string) {
 	if err != nil {
@@ -132,6 +151,32 @@ func pingHandler(formatter *render.Render) http.HandlerFunc {
 	}
 }
 
+func makePaymentHandler(formatter *render.Render) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		var pay payment
+		uuid, _ := uuid.NewV4()
+		decoder := json.NewDecoder(req.Body)
 
+		err1 := decoder.Decode(&pay)
+
+		if err1 != nil {
+			ErrorWithJSON(w, "Incorrect body", http.StatusBadRequest)
+			fmt.Println(err1)
+			return
+		}
+		pay.Id = uuid.String()
+
+		req_body, _ := json.Marshal(pay)
+		c := NewClient(serverElb)
+		pay_resp, err := c.CreatePayment(uuid.String(), string(req_body))
+
+		if err != nil {
+			log.Fatal(err)
+			formatter.JSON(w, http.StatusBadRequest, err)
+		} else {
+			formatter.JSON(w, http.StatusOK, pay_resp)
+		}
+	}
+}
 
 }
