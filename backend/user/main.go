@@ -1,90 +1,51 @@
 package main
 
 import (
-	"encoding/json"
+	"html/template"
 	"log"
-	"math/rand"
 	"net/http"
-	"strconv"
 
+	"github.com/go-redis/redis"
 	"github.com/gorilla/mux"
 )
 
 //Book Struct (Model)
-type Book struct {
-	ID     string  `json:"id"`
-	Isbn   string  `json:"isbn"`
-	Title  string  `json:"title"`
-	Author *Author `json:"author"`
-}
-type Author struct {
-	Firstname string `json: "firstname"`
-	Lastname  string `json: "lastname"`
+var client *redis.Client
+var templates *template.Template
+
+type Employee struct {
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"lastname"`
+	Gender    string `json:"gender"`
+	Age       int    `json:"age"`
+	ID        int    `json:"id"`
+	Salary    int    `json:"salary"`
 }
 
-//Init books var as as slice Book struct
-var books []Book
+// A list of employees
+type Employees []Employee
 
 //Get all books
-func getBooks(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(books)
+func getEmployees(w http.ResponseWriter, r *http.Request) {
+
 }
 
 //Get a single book
-func getBook(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	params := mux.Vars(r) //Get params
-	//Loop through books and find with id
-	for _, item := range books {
-		if item.ID == params["id"] {
-			json.NewEncoder(w).Encode(item)
-			return
-		}
-	}
-	json.NewEncoder(w).Encode(&Book{})
+func getThisEmployee(w http.ResponseWriter, r *http.Request) {
+
 }
 
 //Create a new book
-func createBook(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	var book Book
-	_ = json.NewDecoder(r.Body).Decode(&book)
-	book.ID = strconv.Itoa(rand.Intn(1000000)) //Mock ID - not safe
-	books = append(books, book)
-	json.NewEncoder(w).Encode(books)
+func createEmployee(w http.ResponseWriter, r *http.Request) {
+
 }
 
 //updateBook
-func updateBook(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	params := mux.Vars(r)
-	for index, item := range books {
-		if item.ID == params["id"] {
-			books = append(books[:index], books[index+1:]...)
-			var book Book
-			_ = json.NewDecoder(r.Body).Decode(&book)
-			book.ID = strconv.Itoa(rand.Intn(1000000)) //Mock ID - not safe
-			books = append(books, book)
-			json.NewEncoder(w).Encode(books)
-			return
-
-		}
-	}
-	json.NewEncoder(w).Encode(books)
+func updateEmployee(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func deleteBook(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	params := mux.Vars(r)
-	for index, item := range books {
-		if item.ID == params["id"] {
-			books = append(books[:index], books[index+1:]...)
-			break
-		}
-	}
-	json.NewEncoder(w).Encode(books)
+func deleteEmployee(w http.ResponseWriter, r *http.Request) {
 
 }
 
@@ -92,17 +53,14 @@ func main() {
 	//Init Router
 	r := mux.NewRouter()
 
-	//Mock data - @todo- implement DB
-	books = append(books, Book{ID: "1", Isbn: "448743", Title: "Book One", Author: &Author{Firstname: "John", Lastname: "Smith"}})
-	books = append(books, Book{ID: "2", Isbn: "847564", Title: "Book Two", Author: &Author{Firstname: "Steve", Lastname: "Jobs"}})
+	r.Handle("/favicon.ico", http.NotFoundHandler())
+	r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("."+"/public/"))))
 
-	//Ruote handlers/ Endpoints
-	r.HandleFunc("/api/books", getBooks).Methods("GET")
-	r.HandleFunc("/api/books/{id}", getBook).Methods("GET")
-	r.HandleFunc("/api/books", createBook).Methods("POST")
-	r.HandleFunc("/api/books/{id}", updateBook).Methods("PUT")
-	r.HandleFunc("/api/books/{id}", deleteBook).Methods("DELETE")
+	r.HandleFunc("/employees", getEmployees).Methods("GET")
+	r.HandleFunc("/employee/{id}", getThisEmployee).Methods("GET")
+	r.HandleFunc("/employee", createEmployee).Methods("POST")
 
-	log.Fatal(http.ListenAndServe(":8000", r))
-
+	r.HandleFunc("/employee/update/{id}", updateEmployee).Methods("PUT")
+	r.HandleFunc("/employee/delete/{id}", deleteEmployee).Methods("DELETE")
+	log.Fatal(http.ListenAndServe(":3000", r))
 }
