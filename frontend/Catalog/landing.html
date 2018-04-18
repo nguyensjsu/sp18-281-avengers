@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+	<title>Burger App</title>
+	
+	<meta charset="utf-8">
+
+
+	 <script src="https://aframe.io/releases/0.8.0/aframe.min.js"></script>
+	 <script src="https://unpkg.com/aframe-environment-component/dist/aframe-environment-component.min.js"></script>
+     
+	 <link rel = "stylesheet" href = "landingstyle.css">
+	 <link rel = "stylesheet" href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   <script src = "app.js"></script>
+
+<style>
+       #map {
+        height: 400px;
+        width: 100%;
+       }
+    </style>
+
+    
+     
+     
+</head>
+<body background = "background.jpg" onload ="userInfo()">
+	<nav class="navbar navbar-default navbar" role="navigation">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Burger King, Inc</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="https://www.mcdonalds.com/us/en-us.html"><img src="mcdonalds.png"  height = 25  width = 30 scale="0"> McDonalds</a></li>
+        <li><a href="https://www.whitecastle.com/"> <img src="white_castle.png"  height = 30  width = 30 scale="0"> White Castle </a></li>
+          
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"> More Resources <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Separated link</a></li>
+            <li class="divider"></li>
+            <li><a href="#">One more separated link</a></li>
+          </ul>
+        </li>
+      </ul>
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+      <ul class="nav navbar-nav navbar-right">
+        <li><p class="navbar-text">Already have an account?</p></li>
+        <li class="dropdown">
+        	 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Sign Up</b> <span class="caret"></span></a>
+        	 <ul id="login-dp" class="dropdown-menu">
+				<li>
+					 <div class="row">
+							<div class="col-md-12">
+								
+								<div class="social-buttons">
+									<a href="www.facebook.com/Login" class="btn btn-fb"><i class="fa fa-facebook"></i> Facebook</a>
+									<a href="www.twitter.com" class="btn btn-tw"><i class="fa fa-twitter"></i> Twitter</a>
+								</div>
+                                
+								 <form class="form"  action = "/signup" method = "POST" accept-charset="UTF-8">
+										
+								 
+										<div class="form-group">
+											
+											 <input type="email"  name = "username" class="form-control" id="email" placeholder="Email">
+                                             
+										</div>
+										<div class="form-group">
+											
+											 <input type="password"  name = "password" class="form-control" id="password" placeholder="Password">
+                                             
+										</div>
+										
+										
+										<div class="form-group">
+											 <button type="submit" id = "sign_up_button" class="btn btn-primary btn-block">Sign Up</button>
+										</div>
+										<div class="checkbox">
+											 <label>
+											 <input type="checkbox"> keep me logged-in
+											 </label>
+										</div>
+								 </form>
+							</div>
+							<div class="bottom text-center">
+								Want to upgrade plan? <a href="#"><b>Join Us</b></a>
+							</div>
+					 </div>
+
+				</li>
+			</ul>
+
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b>Login</b> <span class="caret"></span></a>
+			<ul id="login-dp" class="dropdown-menu">
+				<li>
+					 <div class="row">
+							<div class="col-md-12">
+								
+								<div class="social-buttons">
+									<a href="www.facebook.com/Login" class="btn btn-fb"><i class="fa fa-facebook"></i> Facebook</a>
+									<a href="www.twitter.com" class="btn btn-tw"><i class="fa fa-twitter"></i> Twitter</a>
+								</div>
+                                
+								 <form action = "/login" method = "POST" accept-charset="UTF-8">
+										<div class="form-group">
+											 <label class="sr-only" for="exampleInputEmail2">Email address</label>
+											 <input type="username" name = "username" class="form-control" id="login_username" placeholder="Email address" required>
+										</div>
+										<div class="form-group">
+											 <label class="sr-only" for="exampleInputPassword2">Password</label>
+											 <input type="password" name = "password" class="form-control" id="exampleInputPassword2" placeholder="Password">
+                                             <div class="help-block text-right"><a href="">Forget the password ?</a></div>
+										</div>
+										<div class="form-group">
+											 <button type="submit" id = "sign_in_button" class="btn btn-primary btn-block">Sign in</button>
+										</div>
+										
+										<div class="checkbox">
+											 <label>
+											 <input type="checkbox"> keep me logged-in
+											 </label>
+										</div>
+								 </form>
+							</div>
+							<div class="bottom text-center">
+								New here ? <a href="#"><b>Join Us</b></a>
+							</div>
+					 </div>
+
+				</li>
+			</ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+
+
+
+
+		
+
+<img src="burger-1.jpg" class="img-fluid" alt="Responsive image">
+
+
+
+
+<div class = "well">
+<style>
+.nav-tabs li a {
+    color: #777;
+}
+</style>
+
+<h3 class="text-center">Burger King, Inc</h3> 
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#home">Menu</a></li>
+  <li><a data-toggle="tab" href="#menu1">Locations</a></li>
+  <li><a data-toggle="tab" href="#menu2">Employees</a></li>
+</ul>
+
+<div class="tab-content">
+  <div id="home" class="tab-pane fade in active">
+    <h2>Our Food</h2>
+    <p>The best burger in town!</p>
+  </div>
+  <div id="menu1" class="tab-pane fade">
+    <h2>Open in many locations in San Francisco</h2>
+    <p>Fresh food and good quality</p>
+  </div>
+  <div id="menu2" class="tab-pane fade">
+    <h2>Employees</h2>
+    <p>List of employees</p>
+  </div>
+</div>
+</div>
+
+<div id="map"></div>
+    <script>
+      function initMap() {
+        var uluru = {lat: 37.7749, lng: -122.4194};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 16,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+      }
+    </script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAO5uKe5O0cPb0C4ryfvA5vMGVpLARcVA&callback=initMap"></script>
+
+
+
+<!--
+
+<div id="map"></div>
+    <script>
+
+      function initMap() {
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 3,
+          center: {lat: -28.024, lng: 140.887}
+        });
+
+        // Create an array of alphabetical characters used to label the markers.
+        var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        // Add some markers to the map.
+        // Note: The code uses the JavaScript Array.prototype.map() method to
+        // create an array of markers based on a given "locations" array.
+        // The map() method here has nothing to do with the Google Maps API.
+        var markers = locations.map(function(location, i) {
+          return new google.maps.Marker({
+            position: location,
+            label: labels[i % labels.length]
+          });
+        });
+
+        // Add a marker clusterer to manage the markers.
+        var markerCluster = new MarkerClusterer(map, markers,
+            {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+      }
+      var locations = [
+        {lat: -31.563910, lng: 147.154312},
+        {lat: -33.718234, lng: 150.363181},
+        {lat: -33.727111, lng: 150.371124},
+        {lat: -33.848588, lng: 151.209834},
+        {lat: -33.851702, lng: 151.216968},
+        {lat: -34.671264, lng: 150.863657},
+        {lat: -35.304724, lng: 148.662905},
+        {lat: -36.817685, lng: 175.699196},
+        {lat: -36.828611, lng: 175.790222},
+        {lat: -37.750000, lng: 145.116667},
+        {lat: -37.759859, lng: 145.128708},
+        {lat: -37.765015, lng: 145.133858},
+        {lat: -37.770104, lng: 145.143299},
+        {lat: -37.773700, lng: 145.145187},
+        {lat: -37.774785, lng: 145.137978},
+        {lat: -37.819616, lng: 144.968119},
+        {lat: -38.330766, lng: 144.695692},
+        {lat: -39.927193, lng: 175.053218},
+        {lat: -41.330162, lng: 174.865694},
+        {lat: -42.734358, lng: 147.439506},
+        {lat: -42.734358, lng: 147.501315},
+        {lat: -42.735258, lng: 147.438000},
+        {lat: -43.999792, lng: 170.463352}
+      ]
+    </script>
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBAO5uKe5O0cPb0C4ryfvA5vMGVpLARcVA&callback=initMap">
+    </script>
+ -->
+ 
+ 
+    
+<div class = "well">
+	<div id="contact" class="container-fluid bg-grey">
+
+	  <h2 id ="contact_header">CONTACT</h2>
+	  <div class="row">
+	    <div class="col-sm-5">
+	      <p>Contact us and we'll get back to you within 24 hours.</p>
+	      <p><span class="glyphicon glyphicon-map-marker"></span> San Francisco, CA, United States</p>
+	      <p><span class="glyphicon glyphicon-phone"></span> +1 (800) 442–4000</p>
+	      <p><span class="glyphicon glyphicon-envelope"></span> SF_Burger.com</p>
+	    </div>
+	    <div class="col-sm-7 slideanim">
+	      <div class="row">
+	        <div class="col-sm-6 form-group">
+	          <input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
+	        </div>
+	        <div class="col-sm-6 form-group">
+	          <input class="form-control" id="contact_email" name="contact_email" placeholder="Email" type="email" required>
+	        </div>
+	      </div>
+	      <textarea class="form-control" id="comments" name="comments" placeholder="Comment" rows="5"></textarea><br>
+	      <div class="row">
+	        <div class="col-sm-12 form-group">
+	          <button class="btn btn-default pull-right" type="submit">Send</button>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+
+</script>
+
+
+
+</body>
+</html>
