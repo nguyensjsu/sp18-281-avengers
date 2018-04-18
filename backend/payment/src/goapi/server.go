@@ -88,6 +88,46 @@ func (c *Client) GetPing()(string, error) {
 	return string(body), nil
 }
 
+func (c *Client) getKeys() ([]string, error) {
+	var keys_nil [] string
+	resp, err := c.Get(c.Endpoint + "/buckets/payment/keys?keys=true")
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return keys_nil, err
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if debug { fmt.Println("[RIAK DEBUG] POST: " + c.Endpoint + "/buckets/payment/keys/ " + string(body)) }
+	var all_keys keys
+	err1 := json.Unmarshal(body, &all_keys)
+	_ = err1
+ 	fmt.Println(all_keys)
+
+	return all_keys.Keys, err
+}
+
+func (c *Client) GetPayment(key string) (payment) {
+	//var payment_nil payment
+	conn, cacheFlag, cache_pay := connectToRedis(redisServer, key)
+	if cacheFlag {
+
+		resp, _ := c.Get(c.Endpoint + "/buckets/payment/keys/"+key)
+		
+		defer resp.Body.Close()
+		body, _ := ioutil.ReadAll(resp.Body)
+
+		var pay payment
+		err1 := json.Unmarshal(body, &pay)
+		_ = err1
+	 	fmt.Println(pay)
+
+	 	conn.Cmd("HMSET", pay.Id, "object", string(body))
+	 	return pay
+	 } else {
+	return cache_pay
+	}
+}
+
 // Init Database Connections
 
 func init() {
@@ -109,6 +149,8 @@ func init() {
 // API Routes
 func initRoutes(mx *mux.Router, formatter *render.Render) {
 	mx.HandleFunc("/ping", pingHandler(formatter)).Methods("GET")
+	mx.HandleFunc("/payment", makePaymentHandler(formatter)).Methods("POST")
+	mx.HandleFunc("/payment/{id}", getPaymentHandler(formatter)).Methods("GET")
 }
 
 func (c *Client) CreatePayment(key, reqbody string) (payment, error) {
@@ -175,6 +217,36 @@ func makePaymentHandler(formatter *render.Render) http.HandlerFunc {
 			formatter.JSON(w, http.StatusBadRequest, err)
 		} else {
 			formatter.JSON(w, http.StatusOK, pay_resp)
+		}
+	}
+}
+
+func getPaymentHandler(formatter *render.Render) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+
+		c := NewClient(serverElb)
+		params := mux.Vars(req)
+		var uid string = params["id"]
+		if uid == "" {
+			fmt.Println("id nor found")
+		} else {
+			fmt.Println(uid)
+		}
+		payment_keys, err := c.getKeys()
+		payment_list := []payment{}
+		for _ , item := range payment_keys {
+			pay := c.GetPayment(item)
+			fmt.Println(pay.UserId, pay, "single item")
+			if(pay.UserId == uid) {
+				payment_list = append(payment_list, pay)
+			}
+		}
+
+		if err != nil {
+			log.Fatal(err)
+			formatter.JSON(w, http.StatusBadRequest, err)
+		} else {
+			formatter.JSON(w, http.StatusOK, payment_list)
 		}
 	}
 }
