@@ -3,6 +3,11 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"strings"
+	"time"
+
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
 	uuid "github.com/satori/go.uuid"
@@ -57,7 +62,35 @@ func (c *Client) Ping() (string, error) {
 	}
 	return string(body), nil
 }
+// Create a new Review
+func (c *Client) CreateReview(key, reqbody string) (Review, error) {
+	var rev_nil = Review{}
 
+	resp, err := c.Post(c.Endpoint+"/buckets/Review/keys/"+key+"?returnbody=true",
+		"application/json", strings.NewReader(reqbody))
+
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return rev_nil, err
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+
+	if debug {
+		fmt.Println("[RIAK DEBUG] POST: " + c.Endpoint + "/buckets/Review/keys/" + key + "?returnbody=true => " + string(body))
+	}
+
+	var rev Review
+
+	err = json.Unmarshal(body, &rev)
+
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return rev_nil, err
+	}
+	return rev, err
+}
 
 // Initialize our server and test ping.
 func init() {
@@ -74,6 +107,7 @@ func init() {
 // Initializing routes
 func initRoutes(mx *mux.Router, formatter *render.Render) {
 	mx.HandleFunc("/ping", pingHandler(formatter)).Methods("GET")
+	mx.HandleFunc("/review", newReviewHandler(formatter)).Methods("POST")
 }
 
 func failOnError(err error, msg string) {
@@ -105,6 +139,40 @@ func pingHandler(formatter *render.Render) http.HandlerFunc {
 			return
 		} else {
 			formatter.JSON(w, http.StatusOK, message)
+		}
+	}
+}
+
+// Handle new review request
+func newReviewHandler(formatter *render.Render) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+
+		var newReview Review
+		uuid, _ := uuid.NewV4()
+
+		decoder := json.NewDecoder(req.Body)
+		// fmt.Println(decoder)
+
+		err := decoder.Decode(&newReview)
+		if err != nil {
+			ErrorWithJSON(w, "Incorrect body", http.StatusBadRequest)
+			fmt.Println("[HANDLER DEBUG] ", err.Error())
+			return
+		}
+
+		newReview.Id = uuid.String()
+		// ReviewItems := newReview.Items
+
+		reqbody, _ := json.Marshal(newReview)
+
+		c := NewClient(nodeELB)
+		val_resp, err := c.CreateReview(uuid.String(), string(reqbody))
+
+		if err != nil {
+			fmt.Println("[HANDLER DEBUG] ", err.Error())
+			formatter.JSON(w, http.StatusBadRequest, err)
+		} else {
+			formatter.JSON(w, http.StatusOK, val_resp)
 		}
 	}
 }
