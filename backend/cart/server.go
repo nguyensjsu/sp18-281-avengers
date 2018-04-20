@@ -1,8 +1,8 @@
 package main
 
 import (
-	_"fmt"
-	_"log"
+	"fmt"
+	"log"
 	"net/http"
 	"github.com/codegangsta/negroni"
 	"github.com/gorilla/mux"
@@ -41,6 +41,22 @@ func NewServer() *negroni.Negroni {
 	return n
 }
 
+// Ping the API to check if its working.
+func (c *Client) Ping() (string, error) {
+	resp, err := c.Get(c.Endpoint + "/ping")
+
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return "Ping Error!", err
+	}
+
+	defer resp.Body.Close()
+	
+	body, err := ioutil.ReadAll(resp.Body)
+
+	return string(body), nil
+}
+
 func init() {
 	c := NewClient(nodeELB)
 	msg, err := c.Ping()
@@ -63,8 +79,25 @@ func failOnError(err error, msg string) {
 	}
 }
 
-func pingHandler(formatter *render.Render) http.HandlerFunc {
+unc pingHandler(formatter *render.Render) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-		formatter.JSON(w, http.StatusOK, struct{Test string}{"Test API is live!!"})
+		setupResponse(&w, req)
+		if (*req).Method == "OPTIONS" {
+			return
+		}
+		c := NewClient(nodeELB)
+
+		message, err := c.Ping()
+
+		if message == "OK" {
+			message = "Cart API is working."
+		}
+
+		if err != nil {
+			fmt.Println("[HANDLER DEBUG] ", err.Error())
+			return
+		} else {
+			formatter.JSON(w, http.StatusOK, message)
+		}
 	}
 }
