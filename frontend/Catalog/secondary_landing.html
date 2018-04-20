@@ -83,12 +83,55 @@
   </div><!-- /.container-fluid -->
 </nav>
 
+<div id="wrapper">
 
+    
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+
+            <ul class="sidebar-nav">
+            	 
+                <li class="sidebar-brand">
+                    <a href="#">
+                       Menu
+                    </a>
+                    
+                </li>
+                <li>
+                    <a href="/starters">Starters</a>
+                </li>
+                <li>
+                    <a href ="/burger">Burgers</a>
+                </li>
+                <li>
+                    <a href="/shakes">Shakes</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+               
+                
+                <img  href="#menu-toggle" src="burger_banner.jpg"  id="menu-toggle" height = 500 width = 100% scale="0">
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
     <!-- /#wrapper -->
 
     <!-- Bootstrap core JavaScript -->
  
     <!-- Menu Toggle Script -->
-   
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
 </body>
 </html>
