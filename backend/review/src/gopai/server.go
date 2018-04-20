@@ -104,10 +104,68 @@ func init() {
 	}
 }
 
+// View Review of specific key
+func (c *Client) GetReview(key string) Review {
+	var rev_nil = Review{}
+	resp, err := c.Get(c.Endpoint + "/buckets/Review/keys/" + key)
+
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return rev_nil
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+
+	if debug {
+		fmt.Println("[RIAK DEBUG] GET: " + c.Endpoint + "/buckets/Review/keys/" + key + " => " + string(body))
+	}
+
+	var rev = Review{}
+
+	if err := json.Unmarshal(body, &rev); err != nil {
+		fmt.Println("RIAK DEBUG] JSON unmarshaling failed: %s", err)
+		return rev_nil
+	}
+	return rev
+}
+
+// Get keys of all objects stored in database.
+func (c *Client) GetKeys() ([]string, error) {
+
+	var keys_nil []string
+	resp, err := c.Get(c.Endpoint + "/buckets/Review/keys?keys=true")
+
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return keys_nil, err
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+
+	if debug {
+		fmt.Println("[RIAK DEBUG] GET: " + c.Endpoint + "/buckets/Review/keys/ " + string(body))
+	}
+
+	var all_keys Keys
+	err = json.Unmarshal(body, &all_keys)
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return keys_nil, err
+	}
+
+	// fmt.Println(all_keys)
+
+	return all_keys.Keys, err
+}
 // Initializing routes
 func initRoutes(mx *mux.Router, formatter *render.Render) {
 	mx.HandleFunc("/ping", pingHandler(formatter)).Methods("GET")
 	mx.HandleFunc("/review", newReviewHandler(formatter)).Methods("POST")
+	mx.HandleFunc("/review/{pid}", viewReviewHandler(formatter)).Methods("GET")
 }
 
 func failOnError(err error, msg string) {
@@ -173,6 +231,33 @@ func newReviewHandler(formatter *render.Render) http.HandlerFunc {
 			formatter.JSON(w, http.StatusBadRequest, err)
 		} else {
 			formatter.JSON(w, http.StatusOK, val_resp)
+		}
+	}
+}
+
+// To view Reviews
+func viewReviewHandler(formatter *render.Render) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		// fmt.Println("View Review handler called.")
+
+		params := mux.Vars(req)
+		var pid string = params["pid"]
+
+		c := NewClient(nodeELB)
+		Review_keys, err := c.GetKeys()
+		Review_list := []Review{}
+		for _, item := range Review_keys {
+			review := c.GetReview(item)
+			if review.ProductId == pid {
+				Review_list = append(Review_list, review)
+			}
+		}
+
+		if err != nil {
+			fmt.Println("[HANDLER DEBUG] ", err.Error())
+			formatter.JSON(w, http.StatusBadRequest, err)
+		} else {
+			formatter.JSON(w, http.StatusOK, Review_list)
 		}
 	}
 }
