@@ -161,11 +161,34 @@ func (c *Client) GetKeys() ([]string, error) {
 
 	return all_keys.Keys, err
 }
+
+// Update Review for updating Review.
+func (c *Client) UpdateReview(key, reqbody string) (Review, error) {
+	var rev_nil = Review{}
+	req, _ := http.NewRequest("PUT", c.Endpoint+"/buckets/Review/keys/"+key+"?returnbody=true", strings.NewReader(reqbody))
+	req.Header.Add("Content-Type", "application/json")
+	// fmt.Println( req )
+	resp, err := c.Do(req)
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if debug {
+		fmt.Println("[RIAK DEBUG] GET: " + c.Endpoint + "update" + "=> " + string(body))
+	}
+
+	var updatedrev Review
+	err = json.Unmarshal(body, &updatedrev)
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return rev_nil, err
+	}
+	return updatedrev, err
+}
 // Initializing routes
 func initRoutes(mx *mux.Router, formatter *render.Render) {
 	mx.HandleFunc("/ping", pingHandler(formatter)).Methods("GET")
 	mx.HandleFunc("/review", newReviewHandler(formatter)).Methods("POST")
 	mx.HandleFunc("/review/{pid}", viewReviewHandler(formatter)).Methods("GET")
+	mx.HandleFunc("/review/{cid}", updateReviewHandler(formatter)).Methods("PUT")
 }
 
 func failOnError(err error, msg string) {
@@ -258,6 +281,45 @@ func viewReviewHandler(formatter *render.Render) http.HandlerFunc {
 			formatter.JSON(w, http.StatusBadRequest, err)
 		} else {
 			formatter.JSON(w, http.StatusOK, Review_list)
+		}
+	}
+}
+//To Update review
+func updateReviewHandler(formatter *render.Render) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+
+		params := mux.Vars(req)
+		var cid string = params["cid"]
+		if cid == "" {
+			formatter.JSON(w, http.StatusBadRequest, "Invalid Request. User ID Missing.")
+		} else {
+			var newReview Review
+			decoder := json.NewDecoder(req.Body)
+			// fmt.Println(decoder)
+			err := decoder.Decode(&newReview)
+
+			if err != nil {
+				ErrorWithJSON(w, "Incorrect body", http.StatusBadRequest)
+				fmt.Println("[HANDLER DEBUG] ", err.Error())
+				return
+			}
+			c := NewClient(nodeELB)
+			oldReview := c.GetReview(cid)
+			// fmt.Println(newReview.UserId)
+			// fmt.Println(oldReview.UserId)
+			if oldReview.UserId == newReview.UserId {
+				newReview.Id = cid
+				reqbody, _ := json.Marshal(newReview)
+				val_resp, err := c.UpdateReview(cid, string(reqbody))
+				if err != nil {
+					fmt.Println("[HANDLER DEBUG] ", err.Error())
+					formatter.JSON(w, http.StatusBadRequest, err)
+				} else {
+					formatter.JSON(w, http.StatusOK, val_resp)
+				}
+			} else {
+				formatter.JSON(w, http.StatusForbidden, "Unauthorized User")
+			}
 		}
 	}
 }
