@@ -183,12 +183,32 @@ func (c *Client) UpdateReview(key, reqbody string) (Review, error) {
 	}
 	return updatedrev, err
 }
+
+// Delete the Review.
+func (c *Client) DeleteReview(key string) error {
+	req, err := http.NewRequest("DELETE", c.Endpoint+"/buckets/Review/keys/"+key, nil)
+	// req.Header.Add("Content-Type", "application/json")
+
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return err
+	}
+
+	_, err = c.Do(req)
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return err
+	}
+
+	return nil
+}
 // Initializing routes
 func initRoutes(mx *mux.Router, formatter *render.Render) {
 	mx.HandleFunc("/ping", pingHandler(formatter)).Methods("GET")
 	mx.HandleFunc("/review", newReviewHandler(formatter)).Methods("POST")
 	mx.HandleFunc("/review/{pid}", viewReviewHandler(formatter)).Methods("GET")
 	mx.HandleFunc("/review/{cid}", updateReviewHandler(formatter)).Methods("PUT")
+	mx.HandleFunc("/review/{cid}", deleteReviewHandler(formatter)).Methods("DELETE")
 }
 
 func failOnError(err error, msg string) {
@@ -321,5 +341,24 @@ func updateReviewHandler(formatter *render.Render) http.HandlerFunc {
 				formatter.JSON(w, http.StatusForbidden, "Unauthorized User")
 			}
 		}
+	}
+}
+//To delete review
+func deleteReviewHandler(formatter *render.Render) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		// fmt.Println("Delete Review Handler called.")
+
+		params := mux.Vars(req)
+		var cid string = params["cid"]
+
+		c := NewClient(nodeELB)
+		err := c.DeleteReview(string(cid))
+		if err != nil {
+			fmt.Println("[HANDLER DEBUG] ", err.Error())
+			formatter.JSON(w, http.StatusBadRequest, err)
+		} else {
+			formatter.JSON(w, http.StatusOK, "Comment Deleted")
+		}
+
 	}
 }
