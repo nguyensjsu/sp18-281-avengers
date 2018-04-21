@@ -34,4 +34,3 @@ Since our requirements and matches to the Applicability mentioned above we found
 * In full one week during research and since our team we have two varieties of Databases Riak and Redis there were many problems as if how we are gonna establish connection.  
 * We also decided on the High Level overview and architecture of the Counter Burger Application.  
 * Since in after working and Re-searching on the topic for the entire week, we also decided which individual is gonna take which functionality. we decided and communicated within the team.  
-
