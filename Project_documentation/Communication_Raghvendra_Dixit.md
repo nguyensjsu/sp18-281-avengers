@@ -34,3 +34,8 @@ Since our requirements and matches to the Applicability mentioned above we found
 * In full one week during research and since our team we have two varieties of Databases Riak and Redis there were many problems as if how we are gonna establish connection.  
 * We also decided on the High Level overview and architecture of the Counter Burger Application.  
 * Since in after working and Re-searching on the topic for the entire week, we also decided which individual is gonna take which functionality. we decided and communicated within the team.  
+
+## Week 4
+* In this week during discussion we created Architecture diagram. So that eveyone is crystal clear about what is going in the application and how we are gonna achieve.  
+* Since it was decided that Go to be used as a backend, eveyone as per their assigned functionality started working on their APIs basic functionality and discussed the problems encountered in the weekley meetings and on Whatsapp group very often.  
+* Almost everyone was done with theri Ping functionality both for Redis and Riak team.  
