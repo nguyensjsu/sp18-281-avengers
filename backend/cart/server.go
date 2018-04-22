@@ -57,6 +57,56 @@ func (c *Client) Ping() (string, error) {
 	return string(body), nil
 }
 
+// Create a new order
+func (c *Client) CreateOrder(key, reqbody string) (Cart, error) {
+	var ord_nil = Cart{}
+
+	resp, err := c.Post(c.Endpoint + "/buckets/Orders/keys/" + key + "?returnbody=true",
+										"application/json", strings.NewReader(reqbody))
+
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return ord_nil, err
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+
+	var place Cart
+
+	err = json.Unmarshal(body, &place)
+
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return ord_nil, err
+	}
+	return place, err
+}
+
+// Update order for updating completing order.
+func (c *Client) UpdateOrder(cartEdit Cart) (Cart, error) {
+	var ord_nil = Cart {}
+	reqbody, _ := json.Marshal(cartEdit)
+
+	req_body := string(reqbody)
+
+	req, _  := http.NewRequest("PUT", c.Endpoint + "/buckets/Orders/keys/"+ cartEdit.Id +"?returnbody=true", strings.NewReader(req_body) )
+	req.Header.Add("Content-Type", "application/json")
+
+	resp, err := c.Do(req)	
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	
+	var ord Cart
+
+	err = json.Unmarshal(body, &ord)
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return ord_nil, err
+	}
+	return ord, err
+}
+
 func init() {
 	c := NewClient(nodeELB)
 	msg, err := c.Ping()
@@ -70,6 +120,8 @@ func init() {
 
 func initRoutes(mx *mux.Router, formatter *render.Render) {
 	mx.HandleFunc("/", pingHandler(formatter)).Methods("GET")
+	mx.HandleFunc("/order", createOrderHandler(formatter)).Methods("POST")
+	mx.HandleFunc("/order/{id}", updateCartHandler(formatter)).Methods("PUT")
 }
 
 func failOnError(err error, msg string) {
@@ -98,6 +150,108 @@ unc pingHandler(formatter *render.Render) http.HandlerFunc {
 			return
 		} else {
 			formatter.JSON(w, http.StatusOK, message)
+		}
+	}
+}
+
+func createOrderHandler(formatter *render.Render) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		setupResponse(&w, req)
+		if (*req).Method == "OPTIONS" {
+			return
+		}
+		var newCart Cart
+		uuid, _ := uuid.NewV4()
+		
+		decoder := json.NewDecoder(req.Body)
+
+		err := decoder.Decode(&newCart)
+		fmt.Println("*************")
+		fmt.Println(newCart)
+		fmt.Println("*************")
+		if err != nil {
+			ErrorWithJSON(w, "Incorrect body", http.StatusBadRequest)
+			fmt.Println("[HANDLER DEBUG] ", err.Error())
+			return
+		}
+
+		newCart.Id = uuid.String()
+		newCart.Date = time.Now().Local().Format("2006/01/02")
+		newCart.Status = "IN CART"
+		cartItems := newCart.Items
+
+		var totalAmount float64
+
+		for i := 0; i < len(cartItems); i++ {
+			cartItems[i].Amount = calculateAmount(cartItems[i].Count, cartItems[i].Rate)
+			totalAmount += cartItems[i].Amount
+		}
+
+		totalAmount = math.Ceil(totalAmount * 100) / 100
+		newCart.Total = totalAmount
+
+		reqbody, _ := json.Marshal(newCart)
+
+		c := NewClient(nodeELB)
+		val_resp, err := c.CreateOrder(uuid.String(), string(reqbody))
+
+		if err != nil {
+			fmt.Println("[HANDLER DEBUG] ", err.Error())
+			formatter.JSON(w, http.StatusBadRequest, err)
+		} else {
+			formatter.JSON(w, http.StatusOK, val_resp)
+		}
+	}
+}
+
+func updateCartHandler(formatter *render.Render) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+
+		setupResponse(&w, req)
+		if (*req).Method == "OPTIONS" {
+			return
+		}
+
+		params := mux.Vars(req)
+		var uuid string = params["id"]
+
+		if uuid == "" {
+			formatter.JSON(w, http.StatusBadRequest, "Invalid Request. User ID Missing.")
+		} else {
+			var newCart Cart
+			decoder := json.NewDecoder(req.Body)
+			err := decoder.Decode(&newCart)
+
+			if err != nil {
+				ErrorWithJSON(w, "Incorrect body", http.StatusBadRequest)
+				fmt.Println("[HANDLER DEBUG] ", err.Error())
+				return
+			}
+
+			var totalAmount float64
+
+			cartItems := newCart.Items
+
+			for i := 0; i < len(cartItems); i++ {
+				cartItems[i].Amount = calculateAmount(cartItems[i].Count, cartItems[i].Rate)
+				totalAmount += cartItems[i].Amount
+			}
+			totalAmount = math.Ceil(totalAmount * 100) / 100
+
+			newCart.Total = totalAmount
+			newCart.Id = uuid
+			newCart.Date = time.Now().Local().Format("2006/01/02")
+			
+			c := NewClient(nodeELB)
+			reqbody, _ := json.Marshal(newCart)
+			val_resp, err := c.CreateOrder(uuid, string(reqbody))
+
+			if err != nil {
+				fmt.Println("[HANDLER DEBUG] ", err.Error())
+				formatter.JSON(w, http.StatusBadRequest, err)
+			} else {
+				formatter.JSON(w, http.StatusOK, val_resp)
+			}
 		}
 	}
 }

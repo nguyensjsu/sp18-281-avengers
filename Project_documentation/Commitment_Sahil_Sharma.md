@@ -23,3 +23,10 @@ Below are the core agile value of Commitment seen in Week 2 development:
 * Since we had two projects Individual and the Hackathon, we had two flavors of Databases in our application Redis and Riak, Team spent entire week in researching about their Databse selected, and later during the weekly meeting I could see everyoen pooled in and figured out the impediments encountered collaboratively. This clearly shows a sense of commitment in the team for a common goal.  
 
 * There was a problem , when one of our team member fell sick and was unable to participate in person in meeting, he still atended the weekly meeting through Hangout. Thsi clearly shows a level of commitment within the team.  
+
+## Week 3
+
+Below are the core agile value of Commitment seen in Week 3 development:  
+
+* In week 3 of Development, we also got a chance to attend the AWS summit at San Fransisco, Two members from our team attended that session and shared the knowledge between us. We also got some free credits for the AWS account, whcih helped for Hackathon project. We researched and asked few of AWS members and also learntabout different cloud hosting technologies, Redis Hence we used few of the functionalities in the project. This clearly demonstrates the Commitment with in the team and deication towards the work. 
+* After the session everyone in teh team kicked off for developing their API and committed to finish their Ping API by end of next week.
