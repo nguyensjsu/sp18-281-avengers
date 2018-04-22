@@ -40,6 +40,28 @@ func NewClient(server string) *Client {
 	}
 }
 
+func connectToRedis(redis_connect string, key string) (*redis.Client, bool, payment) {
+	var result payment
+	conn, err := redis.Dial("tcp", redisServer)
+	if err != nil {
+		log.Fatal("redis failed to connect")
+		log.Fatal(err)
+	}
+	cacheFlag := false
+	//get from redis
+	val, err := conn.Cmd("HGET", key, "object").Str()
+	if err != nil {
+		//not in redis
+		fmt.Println("couldn't find values in Redis")
+		cacheFlag = true
+
+	}
+	json.Unmarshal([]byte(val), &result)
+	fmt.Println("cacheFlag")
+	fmt.Println(cacheFlag)
+
+	return conn, cacheFlag, result
+}
 
 func (c *Client) Ping() (string, error) {
 
