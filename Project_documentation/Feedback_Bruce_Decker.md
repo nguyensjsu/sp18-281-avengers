@@ -40,4 +40,12 @@ On week three, we discussed past feedbacks. Each team member started working on 
 * Team members expressed their concerns and problems
 * The whole talked about continuous improvements 
 
+## Week 4
+On week 4, the team continued working on coding and documentation.
+* Had issues with connecting Riak and Redis on Go API
+*  Tried to resolve the issue
+*  Looked at ways to deploy our application
+*  Improved UI
+*  Tried to find out the best way to improve UI
+*  Worked on organizing code
 
