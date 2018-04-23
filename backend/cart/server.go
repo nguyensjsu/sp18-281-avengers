@@ -107,6 +107,79 @@ func (c *Client) UpdateOrder(cartEdit Cart) (Cart, error) {
 	return ord, err
 }
 
+// Get keys of all objects stored in database.
+func (c *Client) GetKeys() ([]string, error) {
+	var keys_nil [] string
+
+	resp, err := c.Get(c.Endpoint + "/buckets/Orders/keys?keys=true")
+	
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return keys_nil, err
+	}
+	
+	defer resp.Body.Close()
+	
+	body, err := ioutil.ReadAll(resp.Body)
+	
+	var all_keys Keys
+	err = json.Unmarshal(body, &all_keys)
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return keys_nil, err
+	}
+ 
+	return all_keys.Keys, err
+}
+
+
+
+// View order of specific key
+func (c *Client) GetOrder(key string) (Cart) {
+
+	var ord_nil = Cart {}
+	resp, err := c.Get(c.Endpoint + "/buckets/Orders/keys/" + key)
+		
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return ord_nil
+	}
+
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+
+	var cart Cart
+	err = json.Unmarshal(body, &cart)
+	if err != nil {
+		fmt.Println("RIAK DEBUG] JSON unmarshaling failed: %s", err)
+		return ord_nil
+	}
+	fmt.Println("[TEST] ", cart)	
+
+
+	var ord_nil = Cart {}
+	resp, err := c.Get(c.Endpoint + "/buckets/Orders/keys/" + key )
+
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return ord_nil
+	}
+
+	defer resp.Body.Close()
+	
+	body, err := ioutil.ReadAll(resp.Body)
+	
+	var ord = Cart {}
+	
+	if err := json.Unmarshal(body, &ord); err != nil {
+		fmt.Println("RIAK DEBUG] JSON unmarshaling failed: %s", err)
+		return ord_nil
+	}
+	return ord
+}
+
+
 func init() {
 	c := NewClient(nodeELB)
 	msg, err := c.Ping()
@@ -122,6 +195,7 @@ func initRoutes(mx *mux.Router, formatter *render.Render) {
 	mx.HandleFunc("/", pingHandler(formatter)).Methods("GET")
 	mx.HandleFunc("/order", createOrderHandler(formatter)).Methods("POST")
 	mx.HandleFunc("/order/{id}", updateCartHandler(formatter)).Methods("PUT")
+	mx.HandleFunc("/view/{id}", getOrderHandler(formatter)).Methods("GET")
 }
 
 func failOnError(err error, msg string) {
@@ -129,6 +203,12 @@ func failOnError(err error, msg string) {
 		fmt.Println("[FAIL ON ERROR DEBUG] %s: %s", msg, err)
 		panic(fmt.Sprintf("%s: %s", msg, err))
 	}
+}
+
+func ErrorWithJSON(w http.ResponseWriter, message string, code int) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(code)
+	fmt.Fprintf(w, "{message: %q}", message)
 }
 
 unc pingHandler(formatter *render.Render) http.HandlerFunc {
@@ -251,6 +331,36 @@ func updateCartHandler(formatter *render.Render) http.HandlerFunc {
 				formatter.JSON(w, http.StatusBadRequest, err)
 			} else {
 				formatter.JSON(w, http.StatusOK, val_resp)
+			}
+		}
+	}
+}
+
+// To view our order
+func getOrderHandler(formatter *render.Render) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		
+		params := mux.Vars(req)
+		var uuid string = params["id"]
+		// fmt.Println( "Order Params ID: ", uuid )
+
+		if uuid == ""  {
+			formatter.JSON(w, http.StatusBadRequest, "Invalid Request. Order ID Missing.")
+		} else {
+
+			c := NewClient(nodeELB)
+			keys, _ := c.GetKeys();
+			var prev_cart Cart
+			for _ , item := range keys {
+				cart := c.GetOrder(item)
+				if cart.UserID == uuid  && cart.Status == "IN CART"{
+					prev_cart = cart
+				}
+			}
+			if prev_cart.Id == "" {
+				formatter.JSON(w, http.StatusNoContent, nil)
+			} else {
+				formatter.JSON(w, http.StatusOK, prev_cart)
 			}
 		}
 	}
