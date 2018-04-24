@@ -144,3 +144,30 @@ Place : Library, San Jose State University
  
 * Start working with simple ping API in GO
 
+# Week 4:(saturday) 
+ 
+Time : 12.15 pm 
+
+Place : Library, San Jose State University 
+
+**Members Present :** 
+
+* Raghavendra 
+
+* Sahil 
+
+* Aditya 
+
+* Bruce 
+
+* Spandana 
+
+**Meeting Discussion:** 
+
+* Discussed on the issues faced in the development of the front end 
+
+* Designed the front end application for home page, login functionality, Employee Screens, Catalog Screen 
+
+* Discussed on the sources for Go lang to implement API for different features in the application 
+
+* Discussed on how to implement sharding as caching using Redis
