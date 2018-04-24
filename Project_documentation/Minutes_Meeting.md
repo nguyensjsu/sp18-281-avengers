@@ -171,3 +171,29 @@ Place : Library, San Jose State University
 * Discussed on the sources for Go lang to implement API for different features in the application 
 
 * Discussed on how to implement sharding as caching using Redis
+
+# Week 5: (saturday) 
+
+Time : 12.20 pm 
+
+Place : Library, San Jose State University 
+
+**Members Present :** 
+
+* Raghavendra 
+
+* Sahil 
+
+* Aditya 
+
+* Bruce 
+
+* Spandana 
+
+**Meeting Discussion :** 
+
+* Discussed on the issues faced working with the Go API CRUD operations 
+
+* Worked to fix the issues with members in the team 
+
+* Discussed to work on the GO API and test the API with Postman 
