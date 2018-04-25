@@ -23,3 +23,9 @@ All the above are very common in every stage of development, hence Courage is co
 * We decided to have nodejs as front end and maintain different Nosql db Riak and Redis as backend. Entire team took it as a courage to work on two different Nosql db and integrate with the application
 * Though we are not very clear of how to implement the architecture, every one in the team brainstormed individual aspect of the architecture and decided to continue with flow
 
+# Courage shown in Week 4:
+* On Keeping Courage inline with Agile core values, I constanly met professor to discuss on his expectations of each point of the requirement and discuss same with the team 
+* Had discussion on how to implement sharding and show the replication of stale data with the Hackathon project
+
+
+
