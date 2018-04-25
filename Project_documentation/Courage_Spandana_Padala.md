@@ -26,6 +26,3 @@ All the above are very common in every stage of development, hence Courage is co
 # Courage shown in Week 4:
 * On Keeping Courage inline with Agile core values, I constanly met professor to discuss on his expectations of each point of the requirement and discuss same with the team 
 * Had discussion on how to implement sharding and show the replication of stale data with the Hackathon project
-
-
-
