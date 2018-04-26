@@ -30,3 +30,12 @@ Below are the core agile value of Commitment seen in Week 3 development:
 
 * In week 3 of Development, we also got a chance to attend the AWS summit at San Fransisco, Two members from our team attended that session and shared the knowledge between us. We also got some free credits for the AWS account, whcih helped for Hackathon project. We researched and asked few of AWS members and also learntabout different cloud hosting technologies, Redis Hence we used few of the functionalities in the project. This clearly demonstrates the Commitment with in the team and deication towards the work. 
 * After the session everyone in teh team kicked off for developing their API and committed to finish their Ping API by end of next week.
+
+## Week 4
+
+Below are the core agile value of Commitment seen in Week 4 development:  
+
+* Despite of the other subjects w econtinued with our weekly meetings and always commit for the next week tasks.  
+* We start the meeting discuss the updates and as committed earlier everyone in the team successfully created their GO ping APIS for their respective DB.  
+
+

@@ -2,11 +2,16 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"math"
+	"time"
+	"strings"
+	"io/ioutil"
 	"net/http"
+	"encoding/json"
+	"github.com/satori/go.uuid"
 	"github.com/codegangsta/negroni"
-	"github.com/gorilla/mux"
 	"github.com/unrolled/render"
+	"github.com/gorilla/mux"
 )
 
 // render: for rendering JSON file
@@ -196,6 +201,8 @@ func initRoutes(mx *mux.Router, formatter *render.Render) {
 	mx.HandleFunc("/order", createOrderHandler(formatter)).Methods("POST")
 	mx.HandleFunc("/order/{id}", updateCartHandler(formatter)).Methods("PUT")
 	mx.HandleFunc("/view/{id}", getOrderHandler(formatter)).Methods("GET")
+	mx.HandleFunc("/history/{id}", viewCartHandler(formatter)).Methods("GET")
+	
 }
 
 func failOnError(err error, msg string) {
@@ -363,5 +370,36 @@ func getOrderHandler(formatter *render.Render) http.HandlerFunc {
 				formatter.JSON(w, http.StatusOK, prev_cart)
 			}
 		}
+	}
+}
+
+func viewCartHandler(formatter *render.Render) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		params := mux.Vars(req)
+		var uid string = params["id"]
+
+		if uid == "" {
+			formatter.JSON(w, http.StatusBadRequest, "Invalid Request. User ID Missing.")
+		} else {
+			c := NewClient(nodeELB)
+			
+			cart_keys, err := c.GetKeys()
+			cart_list := []Cart{}
+			for _ , item := range cart_keys {
+				if(c.GetOrder(item).UserID == uid) {
+					if(c.GetOrder(item).Status != "CLEARED") {
+						cart_list = append(cart_list, c.GetOrder(item))
+					}
+				}
+			}
+
+			if err != nil {
+				fmt.Println("[HANDLER DEBUG] ", err.Error())
+				formatter.JSON(w, http.StatusBadRequest, err)
+			} else {
+				formatter.JSON(w, http.StatusOK, cart_list)
+			}
+		}
+		
 	}
 }
