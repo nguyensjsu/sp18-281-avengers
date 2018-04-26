@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Burger</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div id="starter" style="background:#F5CBA7">
+        <img src="images/burger_v1.gif" height=300px width=100%>
+    </div> </br> </br>
+    <center><h1 id="heading"><label class="container">HANDCRAFTED BURGERS ON A BUN</h1>
+        <h5>Made with 100% all natural, responsibly raised and handled angus beef • anti-biotic free with no added hormones • cooked to order and true to weight, give or take</h5> </br>
+    </center>
+    
+<div id="adminTasks">
+     <!-- Buttons to create burger,update price and delete burger by admin -->
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-success add-cart" id="addBurger" onclick="location.href = 'createBurger.html'">Add Burger</button>
+                <button type="button" class="btn btn-warning" id="updatePrice" onclick="location.href = 'updatePrice.html'">Update Price</button>
+                <button type="button" class="btn btn-danger" id="deleteBurger" onclick="location.href = 'deleteBurger.html'">Delete Burger</button>
+                <button type="button" class="btn btn-info" id="fetchBurger" onclick="fetchBurger()">Get Burger</button>
+             </div>
+        </div>  
+    </div> </br>
+     
+</div>
+    <div id="result">
+    </div>
+    <!-- <div id="itemlist">
+      <fieldset class="scheduler-border">
+            <label class="container">
+               THE PURIST</br> 
+                <span>$8.75</span> </br>
+                <span>all natural beef* • brioche bun</span> </br>
+                <button type="button" class="btn btn-success add-cart" id="purist">Add to Cart</button> &nbsp;
+                <button type="button" class="btn btn-primary" id="moreInfo"  onclick="location.href = 'PuristReview.html'">MoreInfo</button>
+            </label>
+            <label class="container">
+                THE COUNTER BURGER</br> 
+                <span>$13.75</span> </br>
+                <span>all natural beef* • provolone • tomatoes • lettuce blend • fried onion strings • sautéed mushrooms • garlic aioli • brioche bun</span>
+                <button type="button" class="btn btn-success add-cart" id="counterburger">Add to Cart</button>
+                <button type="button" class="btn btn-primary" id="moreInfo"  onclick="location.href = 'PuristReview.html'">MoreInfo</button>
+            </label>
+
+            
+            <label class="container">
+                SPROUTED VEGGIE </br> 
+                <span>$11.75</span> </br>
+                <span>housemade vegan veggie • organic mixed greens • red onions • roasted red peppers • alfalfa sprouts • dijon balsamic • multigrain bun</span>
+                <button type="button" class="btn btn-success add-cart" id="veggie">Add to Cart</button>
+                <button type="button" class="btn btn-primary" id="moreInfo"  onclick="location.href = 'PuristReview.html'">MoreInfo</button>    
+            </label>
+
+            <label class="container">
+                MINIS</br> 
+                <span>$11.25</span> </br>
+                <span>all natural beef* • tillamook cheddar • pickles • red onions • the counter relish • mini hawaiian buns</span>
+                <button type="button" class="btn btn-success add-cart" id="minis">Add to Cart</button>
+                <button type="button" class="btn btn-primary" id="moreInfo"  onclick="location.href = 'PuristReview.html'">MoreInfo</button>    
+            </label>
+          
+            <label class="container">
+                BACON BBQ</br> 
+                <span>$15.75</span> </br>
+                <span>all natural beef* • tillamook cheddar • applewood smoked bacon • tomatoes • fried onion strings • hickory bbq • brioche bun</span>
+                <button type="button" class="btn btn-success add-cart" id="bacon">Add to Cart</button>
+                <button type="button" class="btn btn-primary" id="moreInfo"  onclick="location.href = 'PuristReview.html'">MoreInfo</button>    
+            </label>
+            <label class="container" id="result">
+            </label> 
+            
+      </fieldset>
+ 
+    </div> -->
+
+    <script src="saveBurger.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</body>
+</html>

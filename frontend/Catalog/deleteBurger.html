@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Create Burger</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+        
+                <div id="header" style="background:#E67E22">
+                        <!-- <label id="headerRow">
+                           Add Burger
+                         </label>   -->
+                         <img src="images/burger_latest.gif" height=200px width=600px>
+                </div> </br> </br>
+                <div>
+                   
+                         <fieldset>
+                        <div class="col-md-12" style="vertical-align: middle;justify-content: center;">
+                          Code :  <input type="text" id="code" style="width:70px"> </br> </br> </br>
+                          Burger Title :  <input type="text" id="title"> </br> </br> </br>
+                          Price :  <input type="text" id="price" style="width:50px" value="$"> </br> </br> </br>
+                          Description : <textarea id="description" rows="5" cols="50"></textarea> </br> </br>
+                         <!-- <button id="save" onclick="createBurger()">Save Item</button> -->
+                         <div style="float:left">
+                         <button id="delete" class="btn btn-danger"  onclick="deleteBurger()">Delete</button> &nbsp;
+                          <button class="btn btn-primary" id="cancel">Cancel</button>
+                        </div>
+                             </div>
+
+                         </fieldset>
+         
+                </div>   
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ <script src="saveBurger.js"></script>
+ <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</body>
+</html>
