@@ -414,11 +414,6 @@ func calculateAmount(count int, rate float64) float64{
 // Delete current order
 func clearCartHandler(formatter *render.Render) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-		
-/*		setupResponse(&w, req)
-		if (*req).Method == "OPTIONS" {
-			return
-		}*/
 
 		params := mux.Vars(req)
 		var uuid string = params["id"]
@@ -442,7 +437,6 @@ func clearCartHandler(formatter *render.Render) http.HandlerFunc {
 				} else {
 					formatter.JSON(w, http.StatusOK, "Cart cleared successfully")
 				}
-
 			} else {
 				formatter.JSON(w, http.StatusOK, "Can't perform this action.")
 			}
