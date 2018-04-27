@@ -46,3 +46,5 @@ Below are the core agile value of Commitment seen in Week 5 development:
 * In Week 5, Despite having a load of indivdual work , team delivered on the commited tasks for cretaing all the CRUD operations.  
 * Everyone having updated through clear communication and doubts cleared on the our common discussion whatsapp group, we successfully developed our CRUD APIs in GO.  
 * It took hours and a lot of debugging to deliver these GO APIs , as we all were pretty new to the language, it shows a greter commitment and dedication to achieve it.  
+
+

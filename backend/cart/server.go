@@ -202,6 +202,7 @@ func initRoutes(mx *mux.Router, formatter *render.Render) {
 	mx.HandleFunc("/order/{id}", updateCartHandler(formatter)).Methods("PUT")
 	mx.HandleFunc("/view/{id}", getOrderHandler(formatter)).Methods("GET")
 	mx.HandleFunc("/history/{id}", viewCartHandler(formatter)).Methods("GET")
+	mx.HandleFunc("/clearCart/{id}", clearCartHandler(formatter)).Methods("DELETE")
 	
 }
 
@@ -401,5 +402,50 @@ func viewCartHandler(formatter *render.Render) http.HandlerFunc {
 			}
 		}
 		
+	}
+}
+
+func calculateAmount(count int, rate float64) float64{
+	total := float64(count) * rate
+	total = math.Ceil(total * 100) / 100
+	return total
+}
+
+// Delete current order
+func clearCartHandler(formatter *render.Render) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		
+/*		setupResponse(&w, req)
+		if (*req).Method == "OPTIONS" {
+			return
+		}*/
+
+		params := mux.Vars(req)
+		var uuid string = params["id"]
+
+		if uuid == "" {
+			formatter.JSON(w, http.StatusBadRequest, "Invalid Request. Order ID Missing.")
+		} else {
+			c := NewClient(nodeELB)
+
+			ord := c.GetOrder(uuid)
+
+			if ord.Id == "" {
+				formatter.JSON(w, http.StatusBadRequest, "")
+			}
+			if ord.Status == "IN CART" {
+				err := c.DeleteOrder(uuid)
+
+				if err != nil {
+					fmt.Println("[HANDLER DEBUG] ", err.Error())
+					formatter.JSON(w, http.StatusBadRequest, err)
+				} else {
+					formatter.JSON(w, http.StatusOK, "Cart cleared successfully")
+				}
+
+			} else {
+				formatter.JSON(w, http.StatusOK, "Can't perform this action.")
+			}
+		}
 	}
 }
