@@ -47,4 +47,12 @@ Below are the core agile value of Commitment seen in Week 5 development:
 * Everyone having updated through clear communication and doubts cleared on the our common discussion whatsapp group, we successfully developed our CRUD APIs in GO.  
 * It took hours and a lot of debugging to deliver these GO APIs , as we all were pretty new to the language, it shows a greter commitment and dedication to achieve it.  
 
+## Week 6
+
+Below are the core agile value of Commitment seen in Week 6 development:  
+
+* In the final week we devloped ocnfidence and this week we have to integrate UI , Go APIs at one place.  
+* As an extra stretch, we also dockerized or GO APIs on the cloud so that it is available via cloud, we also implemented Redis server with RIAK to show Sharding.    
+* We had last minute challenges, in Integration, UI mismatch, common attributes transfer, but we sticked to it and delivered the project successfully as initially planned.  
+
 
