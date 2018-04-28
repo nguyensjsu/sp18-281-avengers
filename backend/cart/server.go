@@ -184,6 +184,24 @@ func (c *Client) GetOrder(key string) (Cart) {
 	return ord
 }
 
+// Clear the cart of current order session.
+func (c *Client) DeleteOrder(key string) (error) {
+	fmt.Println("In Clear Cart: " + key)
+	req, err := http.NewRequest("DELETE", c.Endpoint + "/buckets/Orders/keys/" + key, nil)
+
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return err
+	}
+
+	_, err = c.Do(req)
+	if err != nil {
+		fmt.Println("[RIAK DEBUG] " + err.Error())
+		return err
+	}
+	return  nil
+}
+
 
 func init() {
 	c := NewClient(nodeELB)
