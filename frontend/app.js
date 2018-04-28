@@ -18,13 +18,6 @@ var LocalStorage = require('node-localstorage').LocalStorage,
 localStorage = new LocalStorage('./scratch');
 
 
-//Blockchain dependencies
-const Blockchain = require('./blockchain');
-const P2pServer = require('./p2p-server')
-
-
-const bc = new Blockchain();
-const p2pServer = new P2pServer(bc);
 app.use(bodyParser.json())
 app.use(bodyParser.json())
 
@@ -64,6 +57,28 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'views')));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(bodyParser.json({limit: '50mb'}));
+
+
+
+
+
+
+
+
+app.get('/showBlockchain', function(req, res) {
+  res.sendFile(curr_dir +'/views/showBlockchain.html')
+})
+
+app.get('/addBlockchain', function(req, res) {
+  res.sendFile(curr_dir +'/views/addBlockchain.html')
+})
+
+app.post('/addBlockchain', function(req, res) {
+  console.log("sdsdfsdf")
+    var blockData = req.body.blockData;
+    console.log(blockData)
+    res.redirect("/addBlockchain");
+})
 
 
 
@@ -269,4 +284,171 @@ app.get('/submitComments', function(req, res) {
 app.listen(4000);
 p2pServer.listen();
 console.log("Running app at port 4000");
+
+function userInfo() {
+   
+     $('#sign_in_button').on('click', function() { 
+        alert($('#login_username').val())
+        localStorage.setItem("username", $('#login_username').val());
+        sendUserInfo()
+        var Order = {
+            'userId': localStorage.getItem("username"),
+            'items': []
+        };
+
+        localStorage.setItem('order', JSON.stringify(Order));
+       
+     })
+}
+
+app.get('/userInfo', function(req, res) {
+  res.send(req.data.username)
+  
+
+})
+
+
+
+function sendUserInfo() {
+    var username = localStorage.getItem("username")
+    alert("User name is " + username)
+    axios.get('/userInfo', {
+      username: username
+       
+  })
+  .then(function (response) {
+    response.send(username)
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+
+
+}
+
+
+
+
+
+function EmployeeReport() {
+  var $s = $('#result');
+  var extra_space = '&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+  var space = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+  $s.append( '<table class = "table">')
+  $s.append('<thead> <tr> <th> ID </th>  <th>  First Name  </th><th>  Last Name  </th> <th>  Gender  </th> <th>  Age </th> <th>  Salary  </th> </tr> </thead>');
+  axios.get('http://localhost:5000/employees')
+    .then(function (response) {
+      for (var i = 0; i < response.data.length; i ++) {
+           $s.append('<tbody> <tr>');
+             $s.append('<td>' + response.data[i].id   + space + extra_space +  '</td>')
+           $s.append('<td>' +  response.data[i].firstname   + space + extra_space + '</td>')
+           $s.append('<td>' + response.data[i].lastname + space + extra_space + '</td>')
+           $s.append('<td>' + response.data[i].gender + space + extra_space +'</td>')
+           $s.append('<td>' + response.data[i].age +  space + extra_space +'</td>')
+           $s.append('<td>' + response.data[i].salary + extra_space +'</td>')
+           $s.append('  </tr>' + ' </tbody> ')
+      }
+     
+      
+    })
+    .catch(function (error) {
+      //resultElement.innerHTML = generateErrorHTMLOutput(error);
+    });   
+
+    $s.append(' </table>')
+}
+
+
+function searchEmployee() {
+   var $s = $('#result');
+  
+
+  $('#search_employee_button').on('click', function() { 
+    var ID = $('#search_employee_field').val()
+    
+   
+     axios.get('http://localhost:5000/employee/'+ID)
+    .then(function(response) {
+     
+        localStorage.setItem("employee_first_name", response.data.firstname);
+        localStorage.setItem("employee_last_name", response.data.lastname);
+        localStorage.setItem("employee_gender", response.data.gender);
+        localStorage.setItem("employee_age", response.data.age);
+        localStorage.setItem("employee_salary", response.data.salary)
+         localStorage.setItem("employee_id", ID);
+    }); 
+
+
+  })
+
+}
+
+
+function showSearchEmployee() {
+    var firstname = localStorage.getItem("employee_first_name")
+    var lastname = localStorage.getItem("employee_last_name")
+    var gender = localStorage.getItem("employee_gender")
+    var age = localStorage.getItem("employee_age")
+    var salary = localStorage.getItem("employee_salary")
+    var id = localStorage.getItem("employee_id")
+    var $s = $('#result');
+    var $showID = $('#showID');
+    $showID.append('<h1> Employee ID ' + id + ' Basic Info </h1>')
+    var extra_space = '&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
+  var space = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+  var small_space = '&nbsp;&nbsp;&nbsp;';
+
+    $s.append( '<table class = "table">')
+    $s.append('<thead> <tr>   <th>  First Name  </th><th>  Last Name  </th> <th>  Gender  </th> <th>  Age </th> <th>  Salary  </th> </tr> </thead>')
+   
+    $s.append('<tbody> <tr>');
+    $s.append('<td>' + firstname + space  + space + '</td>')
+    $s.append('<td>' + lastname +  space + extra_space + '</td>')
+    $s.append('<td>' + gender +  space + space + '</td>')
+    $s.append('<td>' + age +  space + space + '</td>')
+    $s.append('<td>' + salary + '</td>')
+    $s.append('  </tr>' + ' </tbody> ')
+    $s.append('</table>');
+
+
+
+}
+
+function showPayment() {
+    
+     var userID = localStorage.getItem("username")
+     var space = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+      var $s = $('#result');
+      $s.append( '<table class = "table">')
+      $s.append(' <thead> <tr>   <th>  Serial Number  </th><th>  User Id  </th> <th>  Card Number  </th> <th>  Order Id </th> <th>  Card Type </th> <th>  Card Holde Name </th>< <th>  Amount </th>/tr> </thead>')
+      
+
+  axios.get('http://18.205.192.131:80/payment/' + userID)
+    .then(function (response) {
+      for (var i = 0; i < response.data.length; i ++) {
+          
+          $s.append('<tbody> <tr>');
+           $s.append('<td>'  + response.data[i].Id + space + '</td>')
+           $s.append('<td>' + response.data[i].UserId + space + '</td>')
+           $s.append('<td>' + response.data[i].CardNumber + space + '</td>')
+           $s.append('<td>' + response.data[i].OrderId +  space +  '</td>')
+            $s.append('<td>' + response.data[i].CardType +  space + space + '</td>')
+           $s.append('<td>' + response.data[i].CardHolderName + space + space +'</td>')
+            $s.append('<td>' + response.data[i].Amount+ '</td>')
+            $s.append('  </tr>' + ' </tbody> ')
+      }
+   
+      
+    })
+    .catch(function (error) {
+      //resultElement.innerHTML = generateErrorHTMLOutput(error);
+    });   
+$s.append('</table>');
+
+}
+
+
+
 
