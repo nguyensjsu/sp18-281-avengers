@@ -62,6 +62,7 @@ func (c *Client) Ping() (string, error) {
 	}
 	return string(body), nil
 }
+
 // Create a new Review
 func (c *Client) CreateReview(key, reqbody string) (Review, error) {
 	var rev_nil = Review{}
@@ -92,19 +93,7 @@ func (c *Client) CreateReview(key, reqbody string) (Review, error) {
 	return rev, err
 }
 
-// Initialize our server and test ping.
-func init() {
-	c := NewClient(nodeELB)
-	msg, err := c.Ping()
-
-	if err != nil {
-		fmt.Println("[INIT DEBUG] " + err.Error())
-	} else {
-		fmt.Println("Riak Ping Server: ", msg)
-	}
-}
-
-// View Review of specific key
+// View order of specific key
 func (c *Client) GetReview(key string) Review {
 	var rev_nil = Review{}
 	resp, err := c.Get(c.Endpoint + "/buckets/Review/keys/" + key)
@@ -162,9 +151,14 @@ func (c *Client) GetKeys() ([]string, error) {
 	return all_keys.Keys, err
 }
 
-// Update Review for updating Review.
+// Update order for updating completing order.
 func (c *Client) UpdateReview(key, reqbody string) (Review, error) {
 	var rev_nil = Review{}
+	// reqbody, _ := json.Marshal(cartEdit)
+
+	// fmt.Println("Id is: ", cartEdit.Id)
+
+	// req_body := string(reqbody)
 	req, _ := http.NewRequest("PUT", c.Endpoint+"/buckets/Review/keys/"+key+"?returnbody=true", strings.NewReader(reqbody))
 	req.Header.Add("Content-Type", "application/json")
 	// fmt.Println( req )
@@ -184,7 +178,7 @@ func (c *Client) UpdateReview(key, reqbody string) (Review, error) {
 	return updatedrev, err
 }
 
-// Delete the Review.
+// Delete the Review of current order session.
 func (c *Client) DeleteReview(key string) error {
 	req, err := http.NewRequest("DELETE", c.Endpoint+"/buckets/Review/keys/"+key, nil)
 	// req.Header.Add("Content-Type", "application/json")
@@ -202,13 +196,31 @@ func (c *Client) DeleteReview(key string) error {
 
 	return nil
 }
+
+// Initialize our server and test ping.
+func init() {
+	c := NewClient(nodeELB)
+	msg, err := c.Ping()
+
+	if err != nil {
+		fmt.Println("[INIT DEBUG] " + err.Error())
+	} else {
+		fmt.Println("Riak Ping Server: ", msg)
+	}
+}
+
 // Initializing routes
 func initRoutes(mx *mux.Router, formatter *render.Render) {
 	mx.HandleFunc("/ping", pingHandler(formatter)).Methods("GET")
+	mx.HandleFunc("/ping", pingHandler(formatter)).Methods("OPTIONS")
 	mx.HandleFunc("/review", newReviewHandler(formatter)).Methods("POST")
+	mx.HandleFunc("/review", newReviewHandler(formatter)).Methods("OPTIONS")
 	mx.HandleFunc("/review/{pid}", viewReviewHandler(formatter)).Methods("GET")
+	mx.HandleFunc("/review/{pid}", viewReviewHandler(formatter)).Methods("OPTIONS")
 	mx.HandleFunc("/review/{cid}", updateReviewHandler(formatter)).Methods("PUT")
+	mx.HandleFunc("/review/{cid}", updateReviewHandler(formatter)).Methods("OPTIONS")
 	mx.HandleFunc("/review/{cid}", deleteReviewHandler(formatter)).Methods("DELETE")
+	mx.HandleFunc("/review/{cid}", deleteReviewHandler(formatter)).Methods("OPTIONS")
 }
 
 func failOnError(err error, msg string) {
@@ -224,9 +236,21 @@ func ErrorWithJSON(w http.ResponseWriter, message string, code int) {
 	fmt.Fprintf(w, "{message: %q}", message)
 }
 
+func setupResponse(w *http.ResponseWriter, req *http.Request) {
+	(w).Header().Set("Access-Control-Allow-Origin", "")
+    (*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+    (*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+	(*w).Header().Set("Content-Type", "application/json")
+}
+
 // Handles the ping call
 func pingHandler(formatter *render.Render) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
+		setupResponse(&w, req)
+		if (*req).Method == "OPTIONS" {
+			return
+		}
+
 		c := NewClient(nodeELB)
 
 		message, err := c.Ping()
@@ -247,7 +271,10 @@ func pingHandler(formatter *render.Render) http.HandlerFunc {
 // Handle new review request
 func newReviewHandler(formatter *render.Render) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-
+		setupResponse(&w, req)
+		if (*req).Method == "OPTIONS" {
+			return
+		}
 		var newReview Review
 		uuid, _ := uuid.NewV4()
 
@@ -262,6 +289,7 @@ func newReviewHandler(formatter *render.Render) http.HandlerFunc {
 		}
 
 		newReview.Id = uuid.String()
+		newReview.Comment.Date = time.Now().Local().Format("2006/01/02")
 		// ReviewItems := newReview.Items
 
 		reqbody, _ := json.Marshal(newReview)
@@ -282,7 +310,10 @@ func newReviewHandler(formatter *render.Render) http.HandlerFunc {
 func viewReviewHandler(formatter *render.Render) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		// fmt.Println("View Review handler called.")
-
+		setupResponse(&w, req)
+		if (*req).Method == "OPTIONS" {
+			return
+		}
 		params := mux.Vars(req)
 		var pid string = params["pid"]
 
@@ -304,10 +335,14 @@ func viewReviewHandler(formatter *render.Render) http.HandlerFunc {
 		}
 	}
 }
+
 //To Update review
 func updateReviewHandler(formatter *render.Render) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-
+		setupResponse(&w, req)
+		if (*req).Method == "OPTIONS" {
+			return
+		}
 		params := mux.Vars(req)
 		var cid string = params["cid"]
 		if cid == "" {
@@ -343,11 +378,15 @@ func updateReviewHandler(formatter *render.Render) http.HandlerFunc {
 		}
 	}
 }
+
 //To delete review
 func deleteReviewHandler(formatter *render.Render) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		// fmt.Println("Delete Review Handler called.")
-
+		setupResponse(&w, req)
+		if (*req).Method == "OPTIONS" {
+			return
+		}
 		params := mux.Vars(req)
 		var cid string = params["cid"]
 
