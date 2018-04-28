@@ -20,6 +20,33 @@ import (
 // log: to log errors
 // fmt: for print statement
 
+var nodeELB = "http://riak-elb-560330634.us-east-1.elb.amazonaws.com:80"
+var redisServer = "redis:6379"
+
+func connectToRedis(redis_connect string, key string) (*redis.Client, bool, Cart) {
+	var result Cart
+	conn, err := redis.Dial("tcp", redisServer)
+	if err != nil {
+		fmt.Println("[REDIS DEBUG] Redis failed to connect: ", err.Error())
+		// log.Fatal(err)
+	}
+	cacheFlag := false
+	//get from redis
+	val, err := conn.Cmd("HGET", key, "object").Str()
+	if err != nil {
+		//not in redis
+		fmt.Println("couldn't find values in Redis")
+		cacheFlag = true
+
+	}
+
+	json.Unmarshal([]byte(val), &result)
+	fmt.Println("cacheFlag")
+	fmt.Println(cacheFlag)
+
+	return conn, cacheFlag, result
+}
+
 var tr = &http.Transport{
 	MaxIdleConns:       10,
 	IdleConnTimeout:    30 * time.Second,
