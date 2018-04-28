@@ -49,3 +49,13 @@ On week 4, the team continued working on coding and documentation.
 *  Tried to find out the best way to improve UI
 *  Worked on organizing code
 
+## Week 5
+On week 5, we finalized our code and entire project.
+*  Worked on front end integration with back end
+*  Started testing our application
+*  Deployed front end on Heroku
+*  Team members reported problems with NodeJs and Go API
+* Solved the problem with Ajax
+*  Continuously improved code
+
+
