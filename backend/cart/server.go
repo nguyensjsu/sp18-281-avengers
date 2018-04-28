@@ -203,7 +203,7 @@ func initRoutes(mx *mux.Router, formatter *render.Render) {
 	mx.HandleFunc("/view/{id}", getOrderHandler(formatter)).Methods("GET")
 	mx.HandleFunc("/history/{id}", viewCartHandler(formatter)).Methods("GET")
 	mx.HandleFunc("/clearCart/{id}", clearCartHandler(formatter)).Methods("DELETE")
-	
+	mx.HandleFunc("/process", processCartHandler(formatter)).Methods("POST")
 }
 
 func failOnError(err error, msg string) {
@@ -442,4 +442,62 @@ func clearCartHandler(formatter *render.Render) http.HandlerFunc {
 			}
 		}
 	}
+}
+
+func processCartHandler(formatter *render.Render) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+/*
+		setupResponse(&w, req)
+		if (*req).Method == "OPTIONS" {
+			return
+		}*/
+
+		var procOrder Order
+		decoder := json.NewDecoder(req.Body)
+		// fmt.Println(decoder)
+
+		err := decoder.Decode(&procOrder)
+		if err != nil {
+			fmt.Println("[HANDLER DEBUG] ", err.Error())
+		}
+
+		uuid := procOrder.OrderId
+
+		// fmt.Println("[HANDLER DEBUG] uuid:", uuid)
+
+		status := "ORDER PROCESSED"
+
+		if uuid == "" {
+			formatter.JSON(w, http.StatusBadRequest, "Invalid Request. Order ID Missing.")
+		} else {
+			c := NewClient(nodeELB)
+
+			ord := c.GetOrder(uuid)
+			if ord.Id == "" {
+				formatter.JSON(w, http.StatusBadRequest, "")
+				return
+			}
+			if ord.Status == "CLEARED" {
+				message := "Order doesn't exist."
+				formatter.JSON(w, http.StatusBadRequest, message)
+				return
+			} else if ord.Status == "ORDER PROCESSED" {
+				message := "Order already processed."
+				formatter.JSON(w, http.StatusBadRequest, message)
+				return
+			}
+
+			ord.Status = status
+
+			val_resp, err := c.UpdateOrder(ord)
+
+			if err != nil {
+				formatter.JSON(w, http.StatusBadRequest, err)
+			} else {
+				// fmt.Println( "Your current order: ", val_resp )
+				formatter.JSON(w, http.StatusOK, val_resp)
+			}
+		}
+	}
+
 }
