@@ -169,25 +169,36 @@ func (c *Client) GetKeys() ([]string, error) {
 // View order of specific key
 func (c *Client) GetOrder(key string) (Cart) {
 
-	var ord_nil = Cart {}
-	resp, err := c.Get(c.Endpoint + "/buckets/Orders/keys/" + key)
+	conn, cacheFlag, cache_cart := connectToRedis(redisServer, key)
+	if cacheFlag {
+		var ord_nil = Cart {}
+
+		resp, err := c.Get(c.Endpoint + "/buckets/Orders/keys/" + key)
 		
-	if err != nil {
-		fmt.Println("[RIAK DEBUG] " + err.Error())
-		return ord_nil
+		if err != nil {
+			fmt.Println("[RIAK DEBUG] " + err.Error())
+			return ord_nil
+		}
+
+		defer resp.Body.Close()
+
+		body, err := ioutil.ReadAll(resp.Body)
+
+		var cart Cart
+		err = json.Unmarshal(body, &cart)
+		if err != nil {
+			fmt.Println("RIAK DEBUG] JSON unmarshaling failed: %s", err)
+			return ord_nil
+		}
+	 	fmt.Println("[TEST] ", cart)
+
+	 	// Putting in redis server
+	 	conn.Cmd("HMSET", cart.Id, "object", string(body))
+
+	 	return cart
+	} else {
+		return cache_cart
 	}
-
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-
-	var cart Cart
-	err = json.Unmarshal(body, &cart)
-	if err != nil {
-		fmt.Println("RIAK DEBUG] JSON unmarshaling failed: %s", err)
-		return ord_nil
-	}
-	fmt.Println("[TEST] ", cart)	
 
 
 	var ord_nil = Cart {}
@@ -210,7 +221,6 @@ func (c *Client) GetOrder(key string) (Cart) {
 	}
 	return ord
 }
-
 // Clear the cart of current order session.
 func (c *Client) DeleteOrder(key string) (error) {
 	fmt.Println("In Clear Cart: " + key)
