@@ -39,3 +39,9 @@ Since our requirements and matches to the Applicability mentioned above we found
 * In this week during discussion we created Architecture diagram. So that eveyone is crystal clear about what is going in the application and how we are gonna achieve.  
 * Since it was decided that Go to be used as a backend, eveyone as per their assigned functionality started working on their APIs basic functionality and discussed the problems encountered in the weekley meetings and on Whatsapp group very often.  
 * Almost everyone was done with theri Ping functionality both for Redis and Riak team.  
+
+## Week 5
+* In this week Communication played an important role, everyone needs to be in synch as there were some changes and common attributes/variables whichh needs to be shared among the Go APIs, we discussed on that veryoften.  
+* There were some chnages in the Design patterns as well which also needs to be communicated and conveyed within team , that was well established and taken care.  
+* Difference in two Database was one problem , but since due to continous exchnages of thoughts and knowledge shairing within the team helped us to cross that barrier as well.  
+* In this week team was almost done with their CRUD(GET/POST/UPDATE/DELETE) APIs well functionaing.  
