@@ -47,3 +47,26 @@ function addtocart(name, rate) {
 
 
 }
+
+// Function called when user clicks on Done after selecting all the items he/she wants to order.
+// Also opens another page of cart.
+function doneOrder() {
+
+    var order = JSON.parse(localStorage.getItem('order'));
+
+    console.log("[DEBUG]: ", typeof(order))
+    console.log("[DEBUG]: ", order)
+
+
+    axios.post('http://localhost:3000/order', order)
+            .then(function (response){
+                console.log(response);
+                console.log("DEBUG]: Return response", response.data);
+                localStorage.setItem("orderid", response.data.id)
+                console.log(response.data.id)
+                location.href = "cart.html";
+            })
+            .catch(function(error) {
+                console.log(error);
+            });
+}
