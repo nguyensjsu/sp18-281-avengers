@@ -42,6 +42,12 @@ type burgerData struct{
 	//Create a new Burger item
 	mx.HandleFunc("/createitem",createItem(formatter)).Methods("POST")
 	mx.HandleFunc("/createitem",createItem(formatter)).Methods("OPTIONS")
+	//update Burger item
+	mx.HandleFunc("/item",updateItem(formatter)).Methods("PUT")
+	mx.HandleFunc("/item",createItem(formatter)).Methods("OPTIONS")
+	//delete Burger item
+	mx.HandleFunc("/item",deleteItem(formatter)).Methods("DELETE")
+	mx.HandleFunc("/item",createItem(formatter)).Methods("OPTIONS")
 	}
 
 		//Ping handler
@@ -123,6 +129,91 @@ type burgerData struct{
 			fmt.Println("Created New Item",result)
 			var response string="Created as new Burger Recipe!"
 			formatter.JSON(w, http.StatusOK, struct{ Item string `json:"Item,omitempty"` }{response})
+		}
+	}
+
+
+	//update burger
+	func updateItem(formatter *render.Render) http.HandlerFunc{
+		return func(w http.ResponseWriter, req *http.Request){
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Access-Control-Allow-Methods","POST, GET, OPTIONS, PUT, DELETE")
+			w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+			w.Header().Set("Content-Type", "application/json")
+
+			if req.Method == "OPTIONS"{
+				return
+			}
+
+			var m burgerData
+				err=json.NewDecoder(req.Body).Decode(&m)
+				if err != nil {
+					fmt.Println("Error in Decoding the data")
+						panic(err)
+					}
+
+			
+			conn,err:= redis.Dial("tcp", "54.183.231.127:6379")
+			//var conn,err= redis.Dial("tcp", "localhost:6379")
+			err1 := conn.Cmd("AUTH", "mypass") 
+		
+		fmt.Println(err1)
+			if err != nil {
+                log.Fatal(err)
+			}
+			defer conn.Close()
+			val:=conn.Cmd("HEXISTS","Burger",m.Code+"Title")		
+			if val.Err != nil{
+				fmt.Println("There is no so key to update",val.Err)
+				panic(val.Err)
+			}else {
+			result:= conn.Cmd("HMSET", "Burger",m.Code+"Price",m.Price )
+			fmt.Println("After Price Update",result)
+			var response string="Updated Price of Burger"
+			formatter.JSON(w, http.StatusOK, struct{ Item string `json:"Item,omitempty"` }{response})
+			}
+		}
+	}
+
+
+	//Delete Burger
+	func deleteItem(formatter *render.Render) http.HandlerFunc{
+		return func(w http.ResponseWriter, req *http.Request){
+
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Access-Control-Allow-Methods","POST, GET, OPTIONS, PUT, DELETE")
+			w.Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+			w.Header().Set("Content-Type", "application/json")
+			if req.Method == "OPTIONS"{
+				return
+			}
+			var m burgerData
+				err=json.NewDecoder(req.Body).Decode(&m)
+				if err != nil {
+					fmt.Println("Error in Decoding the data")
+						panic(err)
+					}
+
+			
+			conn,err:= redis.Dial("tcp", "54.183.231.127:6379")
+			//conn,err= redis.Dial("tcp", "localhost:6379")
+			err1 := conn.Cmd("AUTH", "mypass") 
+		
+		fmt.Println(err1)
+			if err != nil {
+                log.Fatal(err)
+			}
+			defer conn.Close()
+			val:=conn.Cmd("HEXISTS","Burger",m.Code+"Title")
+			if val.Err != nil{
+				fmt.Println("There is no so key to update",val.Err)
+				panic(val.Err)
+			}else {
+			result:= conn.Cmd("HDEL", "Burger",m.Code+"Code",m.Code+"Title",m.Code+"Price",m.Code+"Description")
+			fmt.Println("After item deleted",result)
+			var response string="This Burger will longer be available in the Catalog"
+			formatter.JSON(w, http.StatusOK, struct{ Item string `json:"Item,omitempty"` }{response})
+			}
 		}
 	}
 
