@@ -37,6 +37,29 @@ type burgerData struct{
 	func initRoutes(mx *mux.Router,formatter *render.Render){
 
 	mx.HandleFunc("/ping",ping(formatter)).Methods("GET")
+<<<<<<< HEAD
+	}
+
+	//Ping handler
+	func ping(formatter *render.Render) http.HandlerFunc{
+		return func(w http.ResponseWriter, req *http.Request) {
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Content-Type", "application/json")
+			fmt.Println("Server running on port 30035")
+			formatter.JSON(w, http.StatusOK, struct{ Burger string }{"Welcome to Counter Burger!"})
+		}
+	}
+	func main(){
+		Connection()
+		formatter := render.New(render.Options{
+			IndentJSON: true,
+		})	
+		mx := mux.NewRouter()
+		initRoutes(mx,formatter)
+		log.Fatal(http.ListenAndServe(":3305", mx))
+		
+	}
+=======
 	//display Burger item
 	mx.HandleFunc("/displayitem",getItem(formatter)).Methods("GET") 
 	//Create a new Burger item
@@ -230,3 +253,4 @@ func main(){
 	log.Fatal(http.ListenAndServe(":3305", mx))
 	
 }
+>>>>>>> 9c022dbd294e4f7f17fadc13d9ed18f2e304b0e5
