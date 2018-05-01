@@ -26,3 +26,7 @@ All the above are very common in every stage of development, hence Courage is co
 # Courage shown in Week 4:
 * On Keeping Courage inline with Agile core values, I constanly met professor to discuss on his expectations of each point of the requirement and discuss same with the team 
 * Had discussion on how to implement sharding and show the replication of stale data with the Hackathon project
+
+# Courage shown in Week 5:
+* On 28st April 2018,Despite of many assignments with other courses, we coordinated to meet with everyone flexible timing discuss on the issues, and resolve them if anyone in the team has already faced the issue.
+* Team maintained courage to welcome the changes in the process of development and moved with correct approach to solve the problem
