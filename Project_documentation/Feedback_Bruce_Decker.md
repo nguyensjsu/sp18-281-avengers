@@ -58,4 +58,9 @@ On week 5, we finalized our code and entire project.
 * Solved the problem with Ajax
 *  Continuously improved code
 
+## Week 6
+On week 6, we did more testing to ensure our app was working correctly.
+*  Manually tested the app
+*  Deployed Go API on Docker cloud
+*  Encouraged team members to have constructive feedbacks
 
