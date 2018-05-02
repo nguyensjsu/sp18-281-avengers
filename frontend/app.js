@@ -18,6 +18,13 @@ var LocalStorage = require('node-localstorage').LocalStorage,
 localStorage = new LocalStorage('./scratch');
 
 
+//Blockchain dependencies
+const Blockchain = require('./blockchain');
+const P2pServer = require('./p2p-server')
+
+
+const bc = new Blockchain();
+const p2pServer = new P2pServer(bc);
 app.use(bodyParser.json())
 app.use(bodyParser.json())
 
@@ -62,7 +69,18 @@ app.use(bodyParser.json({limit: '50mb'}));
 
 
 
+app.get('/blocks', function(req, res) {
+   res.json(bc.chain)
+})
 
+app.post('/mine', function(req, res) {
+
+  const block = bc.addBlock(req.body.data)
+
+  console.log(`New block added: ${block.toString()}`);
+  p2pServer.syncChains();
+  res.redirect('/addBlockchain')
+})
 
 
 app.get('/showBlockchain', function(req, res) {
@@ -450,5 +468,34 @@ $s.append('</table>');
 }
 
 
+function showBlockchain() {
+   var space = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+  var small_space = '&nbsp;&nbsp;&nbsp;';
+      var $s = $('#result');
+      $s.append( '<table class = "table">')
+      $s.append(' <thead> <tr>   <th>  Time Stamp  </th><th>  Last Hash  </th> <th>  Hash  </th> <th>  Data </th> <th>  Nonce </th> <th>  Difficulty </th> </tr> </thead>')
+      axios.get('/blocks')
+    .then(function (response) {
+      for (var i = 0; i < response.data.length; i ++) {
+          $s.append('<tbody> <tr>');
+           $s.append('<td>'  + response.data[i].timestamp + space + '</td>')
+           $s.append('<td>' + response.data[i].lastHash + space + '</td>')
+           $s.append('<td>' + response.data[i].hash + space + '</td>')
+           $s.append('<td>' + response.data[i].data +  space +  '</td>')
+            $s.append('<td>' + response.data[i].nonce +  space + space + '</td>')
+           $s.append('<td>' + response.data[i].difficulty+ space + space +'</td>')
+          
+            $s.append('  </tr>' + ' </tbody> ')
+          
+      }
+   
+     
+    })
+    .catch(function (error) {
+      //resultElement.innerHTML = generateErrorHTMLOutput(error);
+    });   
+
+
+}
 
 
