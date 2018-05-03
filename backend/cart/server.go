@@ -190,7 +190,7 @@ func (c *Client) GetOrder(key string) (Cart) {
 			fmt.Println("RIAK DEBUG] JSON unmarshaling failed: %s", err)
 			return ord_nil
 		}
-	 	fmt.Println("[TEST] ", cart)
+	 	//fmt.Println("[TEST] ", cart)
 
 	 	// Putting in redis server
 	 	conn.Cmd("HMSET", cart.Id, "object", string(body))
