@@ -19,6 +19,7 @@ localStorage = new LocalStorage('./scratch');
 
 
 //Blockchain dependencies
+//Added blockchain
 const Blockchain = require('./blockchain');
 const P2pServer = require('./p2p-server')
 
