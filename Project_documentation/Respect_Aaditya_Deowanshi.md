@@ -35,3 +35,13 @@ The core agile value of respect is shown in the following instances during week 
 * During team discussions, the team were open to opinions and discussions. This shows the respect shown by the team.
 
 * During the team discussions, team members helped each other in resolving several bugs that were there in the project. 
+
+## Respect shown in Week 6
+
+* During the team meeting, the team discussed and collaborated to build both the front-end and back-end of the project.
+
+* The team has also decided to commit atleast two codes to github i.e. one fornt-end code and one back-end code. This shows the respect shown by the team towards the project.
+
+* All the team members have finished their part successfully and integrated with everyone's code. This process went smoothly as the team mates collaborated and discussed all the issues beforehand.
+
+* The team collaborated well and started to put more time to finish the project within the deadline.
