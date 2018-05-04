@@ -16,7 +16,7 @@ import (
 	"github.com/mediocregopher/radix.v2/redis"
 )
 
-var debug = true
+var debug = false
 
 var serverElb = "http://riak-elb-1775435563.us-east-1.elb.amazonaws.com:80"
 
@@ -99,13 +99,6 @@ func (c *Client) GetPing()(string, error) {
 
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
-	//fmt.Println(body)
-	/*var response = map[string]string { }
-	if err := json.Unmarshal({"status" : "ok"}, &response); 
-	err != nil {
-		fmt.Println("RIAK DEBUG] JSON unmarshaling failed: %s", err)
-		return response, err
-	}*/
 
 	return string(body), nil
 }
@@ -152,11 +145,7 @@ func (c *Client) GetPayment(key string) (payment) {
 
 // Init Database Connections
 
-func init() {
-
-	// Get Environment Config
-
-	
+func init() {	
 	// Riak KV Setup	
 	c := NewClient(serverElb)
 	msg, err := c.Ping( )
@@ -173,6 +162,7 @@ func initRoutes(mx *mux.Router, formatter *render.Render) {
 	mx.HandleFunc("/ping", pingHandler(formatter)).Methods("GET")
 	mx.HandleFunc("/payment", makePaymentHandler(formatter)).Methods("POST")
 	mx.HandleFunc("/payment/{id}", getPaymentHandler(formatter)).Methods("GET")
+	mx.HandleFunc("/payment/{id}", getPaymentHandler(formatter)).Methods("OPTIONS")
 }
 
 func (c *Client) CreatePayment(key, reqbody string) (payment, error) {
@@ -211,7 +201,7 @@ func ErrorWithJSON(w http.ResponseWriter, message string, code int) {
 // API Ping Handler
 func pingHandler(formatter *render.Render) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-		formatter.JSON(w, http.StatusOK, struct{ Test string }{"API version 1.0 alive!"})
+		formatter.JSON(w, http.StatusOK, struct{ Test string }{"Go Payment API's are alive!"})
 	}
 }
 
@@ -277,6 +267,4 @@ func getPaymentHandler(formatter *render.Render) http.HandlerFunc {
 			formatter.JSON(w, http.StatusOK, payment_list)
 		}
 	}
-}
-
 }
