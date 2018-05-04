@@ -14,11 +14,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// render: for rendering JSON file
-// negroni: server
-// mux: request handler
-// log: to log errors
-// fmt: for print statement
 
 var nodeELB = "http://riak-elb-560330634.us-east-1.elb.amazonaws.com:80"
 var redisServer = "redis:6379"
