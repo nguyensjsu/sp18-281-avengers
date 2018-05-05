@@ -35,3 +35,18 @@ Since our requirements and matches to the Applicability mentioned above we found
 * We also decided on the High Level overview and architecture of the Counter Burger Application.  
 * Since in after working and Re-searching on the topic for the entire week, we also decided which individual is gonna take which functionality. we decided and communicated within the team.  
 
+## Week 4
+* In this week during discussion we created Architecture diagram. So that eveyone is crystal clear about what is going in the application and how we are gonna achieve.  
+* Since it was decided that Go to be used as a backend, eveyone as per their assigned functionality started working on their APIs basic functionality and discussed the problems encountered in the weekley meetings and on Whatsapp group very often.  
+* Almost everyone was done with theri Ping functionality both for Redis and Riak team.  
+
+## Week 5
+* In this week Communication played an important role, everyone needs to be in synch as there were some changes and common attributes/variables whichh needs to be shared among the Go APIs, we discussed on that veryoften.  
+* There were some chnages in the Design patterns as well which also needs to be communicated and conveyed within team , that was well established and taken care.  
+* Difference in two Database was one problem , but since due to continous exchnages of thoughts and knowledge shairing within the team helped us to cross that barrier as well.  
+* In this week team was almost done with their CRUD(GET/POST/UPDATE/DELETE) APIs well functionaing.  
+
+## Week 6
+* Thsi week was our last week which was very crucial, as we have to create the UI and Integrate every microservice we built.  
+* Since we were good in planning and due to strong communication within team things progressed smoothly, we created the UI in Nodejs and also implemented flavor of Bloc-chain in our app.
+* Since there was lot of integration and the attributes passing from one microservice to another was actually in picture, which requires a lot of co-ordination, that why we thought uninamously to decide on some common library working hours and we sat and worked in close knit group, Libraryas a place and whiteboard as our brainstorming board served our purpose for group meetings, which helped in delivering what we intended.

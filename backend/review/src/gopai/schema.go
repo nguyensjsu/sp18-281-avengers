@@ -13,6 +13,7 @@ type Review struct {
 	Id        string  `json:"Id"`
 	UserId    string  `json:"userId"`
 	ProductId string  `json:"productId"`
+	UserName  string  `json:"userName"`
 	Comment   Comment `json:"comment"`
 	// Status string `json:"status"`
 }

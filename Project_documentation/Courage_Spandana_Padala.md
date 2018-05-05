@@ -30,3 +30,6 @@ All the above are very common in every stage of development, hence Courage is co
 # Courage shown in Week 5:
 * On 28st April 2018,Despite of many assignments with other courses, we coordinated to meet with everyone flexible timing discuss on the issues, and resolve them if anyone in the team has already faced the issue.
 * Team maintained courage to welcome the changes in the process of development and moved with correct approach to solve the problem
+
+# Courage shown in Week 6:
+* From 2nd May - 4th May, entire team showed courage in dealing with the integration problems, fixing the issues,deploying the application as micro service based handling the pressure of less time to deliver the project.
