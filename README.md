@@ -23,3 +23,6 @@ Our Online Counter Burger application has it's front end written in **nodejs**, 
 ## Creativity:
 * We have deployed our GO API on the docker cloud by building the docker images and its respective compose file, thus making the process of deployment smoother
 * We have a cluster of five Riak nodes which has an Elastic Load balancer to distribute the traffic among the nodes.  
+
+## Agile Values
+* [Bruce      -- Feedback](https://github.com/nguyensjsu/team281-avengers/blob/master/Project_Documents/Core%20Values/Feedback_Bruce_Decker.md) 
