@@ -32,4 +32,4 @@ Our Online Counter Burger application has it's front end written in **nodejs**, 
 * [Aaditya 	  -- Respect](https://github.com/nguyensjsu/team281-avengers/blob/master/Project_documentation/Respect_Aaditya_Deowanshi.md)
 
 ## Weekly Meeting Minutes
-* Minutes of Meeting (MoM)](https://github.com/nguyensjsu/team281-avengers/blob/master/Project_documentation/Minutes_Meeting.md)
+* [Minutes of Meeting (MoM)](https://github.com/nguyensjsu/team281-avengers/blob/master/Project_documentation/Minutes_Meeting.md)
