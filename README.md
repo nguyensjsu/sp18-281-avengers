@@ -25,4 +25,4 @@ Our Online Counter Burger application has it's front end written in **nodejs**, 
 * We have a cluster of five Riak nodes which has an Elastic Load balancer to distribute the traffic among the nodes.  
 
 ## Agile Values
-* [Bruce      -- Feedback](https://github.com/nguyensjsu/team281-avengers/blob/master/Project_Documents/Core%20Values/Feedback_Bruce_Decker.md) 
+* [Bruce      -- Feedback](https://github.com/nguyensjsu/team281-avengers/blob/master/Project_documentation/Feedback_Bruce_Decker.md) 
