@@ -197,3 +197,29 @@ Place : Library, San Jose State University
 * Worked to fix the issues with members in the team 
 
 * Discussed to work on the GO API and test the API with Postman 
+
+# Week 6: (May 1- May 4)
+ 
+Time : 12.00 pm 
+
+Place : Library, San Jose State University 
+
+**Members Present :** 
+
+* Raghavendra 
+
+* Sahil 
+
+* Aditya 
+
+* Bruce 
+
+* Spandana 
+
+**Meeting Discussion :** 
+
+* Integrate respective front end with backend
+
+* Fix the issues when integrating front end with backend
+
+* Integrate all the features in an application and resolving the issues
