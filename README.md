@@ -35,7 +35,7 @@ Our Online Counter Burger application has it's front end written in **nodejs**, 
 * [Minutes of Meeting (MoM)](https://github.com/nguyensjsu/team281-avengers/blob/master/Project_documentation/Minutes_Meeting.md)
 
 ## Scrum Task Board and Burndown Chart
-[Scrum Board] ()
+[Scrum Board](https://docs.google.com/spreadsheets/d/1z64gIJFuMCL1kQezgWRH7tGAvfGzGJWe3HYVcTRya50/edit?usp=sharing)
 
 ## Architectural Overview (prone to change)
 ![Architectural Overview](https://github.com/nguyensjsu/team281-avengers/blob/master/Project_documentation/Counter%20Burger%20Architecture.png)
