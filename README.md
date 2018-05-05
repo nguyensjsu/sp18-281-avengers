@@ -26,3 +26,10 @@ Our Online Counter Burger application has it's front end written in **nodejs**, 
 
 ## Agile Values
 * [Bruce      -- Feedback](https://github.com/nguyensjsu/team281-avengers/blob/master/Project_documentation/Feedback_Bruce_Decker.md) 
+* [Spandana   -- Courage](https://github.com/nguyensjsu/team281-avengers/blob/master/Project_documentation/Courage_Spandana_Padala.md)  
+* [Raghvendra -- Communication](https://github.com/nguyensjsu/team281-avengers/blob/master/Project_documentation/Communication_Raghvendra_Dixit.md)  
+* [Sahil 	  -- Commitment](https://github.com/nguyensjsu/team281-avengers/blob/master/Project_documentation/Commitment_Sahil_Sharma.md)  
+* [Aaditya 	  -- Respect](https://github.com/nguyensjsu/team281-avengers/blob/master/Project_documentation/Respect_Aaditya_Deowanshi.md)
+
+## Weekly Meeting Minutes
+* Minutes of Meeting (MoM)](https://github.com/nguyensjsu/team281-avengers/blob/master/Project_documentation/Minutes_Meeting.md)
