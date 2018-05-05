@@ -56,7 +56,7 @@ func NewClient(server string) *Client {
 }
 
 
-
+// Create new server
 func NewServer() *negroni.Negroni {
 	formatter := render.New(render.Options {
 		IndentJSON: true,
@@ -216,6 +216,7 @@ func (c *Client) GetOrder(key string) (Cart) {
 	}
 	return ord
 }
+
 // Clear the cart of current order session.
 func (c *Client) DeleteOrder(key string) (error) {
 	fmt.Println("In Clear Cart: " + key)
@@ -234,7 +235,7 @@ func (c *Client) DeleteOrder(key string) (error) {
 	return  nil
 }
 
-
+// Test function
 func init() {
 	c := NewClient(nodeELB)
 	msg, err := c.Ping()
@@ -274,6 +275,7 @@ func ErrorWithJSON(w http.ResponseWriter, message string, code int) {
 	fmt.Fprintf(w, "{message: %q}", message)
 }
 
+// Resolve Cors issue
 func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
     (*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
@@ -281,7 +283,8 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 	(*w).Header().Set("Content-Type", "application/json")
 }
 
-unc pingHandler(formatter *render.Render) http.HandlerFunc {
+// Ping the database
+func pingHandler(formatter *render.Render) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		setupResponse(&w, req)
 		if (*req).Method == "OPTIONS" {
@@ -304,6 +307,7 @@ unc pingHandler(formatter *render.Render) http.HandlerFunc {
 	}
 }
 
+// To create order
 func createOrderHandler(formatter *render.Render) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		setupResponse(&w, req)
@@ -354,6 +358,7 @@ func createOrderHandler(formatter *render.Render) http.HandlerFunc {
 	}
 }
 
+// To update cart
 func updateCartHandler(formatter *render.Render) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 
@@ -436,6 +441,7 @@ func getOrderHandler(formatter *render.Render) http.HandlerFunc {
 	}
 }
 
+// To view whole cart
 func viewCartHandler(formatter *render.Render) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		params := mux.Vars(req)
@@ -506,6 +512,7 @@ func clearCartHandler(formatter *render.Render) http.HandlerFunc {
 	}
 }
 
+// To process order
 func processCartHandler(formatter *render.Render) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 /*
