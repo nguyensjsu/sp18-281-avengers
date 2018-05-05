@@ -38,4 +38,4 @@ Our Online Counter Burger application has it's front end written in **nodejs**, 
 [Scrum Board](https://docs.google.com/spreadsheets/d/1z64gIJFuMCL1kQezgWRH7tGAvfGzGJWe3HYVcTRya50/edit?usp=sharing)
 
 ## Architectural Overview (prone to change)
-![Architectural Overview](https://github.com/nguyensjsu/team281-avengers/blob/master/Project_documentation/Counter%20Burger%20Architecture.png)
+![Architectural Overview](https://github.com/nguyensjsu/team281-avengers/blob/master/Project_documentation/Counter%20Burger%20Arch.png)
