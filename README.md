@@ -17,7 +17,7 @@ Our Online Counter Burger application has it's front end written in **nodejs**, 
 * **Y axis** - Microservices - We have achieved partioning of functionality by deploying **five microservices** deployed on Docker cloud running/hosted on their respective individual EC2 instances.
 * **Z axis** - Sharding - We have achieved Sharding by adding Redis as a cache server for Cart and Payment APIs.  
 
-## Network Partition : 
+## Network Partition :
 * We have acheived this by having a partition in the cluster, hit the endpoint using the Postman and read the stale data for a particular feature
 
 ## Creativity:
